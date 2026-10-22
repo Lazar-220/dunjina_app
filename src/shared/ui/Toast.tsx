@@ -2,9 +2,12 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { Icon } from './Icon';
 
 const TOAST_DURATION_MS = 5000;
+const ERROR_DURATION_MS = 9000;
 
 export interface ToastOptions {
   message: string;
+  /** Errors are announced immediately and stay a little longer. */
+  tone?: 'error';
   /** Optional action such as "Undo"; the toast closes when it is pressed. */
   action?: { label: string; run: () => void };
 }
@@ -27,7 +30,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const show = useCallback((options: ToastOptions) => {
     clearTimeout(timer.current);
     setToast(options);
-    timer.current = setTimeout(() => setToast(null), TOAST_DURATION_MS);
+    timer.current = setTimeout(() => setToast(null), options.tone === 'error' ? ERROR_DURATION_MS : TOAST_DURATION_MS);
   }, []);
 
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -40,8 +43,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <div aria-live="polite">
         {toast && (
-          <div className="toast">
-            <Icon name="check" />
+          <div className="toast" role={toast.tone === 'error' ? 'alert' : undefined}>
+            <Icon name={toast.tone === 'error' ? 'warning' : 'check'} />
             <span>{toast.message}</span>
             {action && (
               <button

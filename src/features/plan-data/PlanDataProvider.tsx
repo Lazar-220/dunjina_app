@@ -3,6 +3,7 @@ import type { BackupData } from '../../data/backup';
 import { useRepository } from '../../data/RepositoryContext';
 import type { OneOff, Override, Plan } from '../../domain/schema';
 import { indexOverrides, type OverrideIndex } from '../../domain/schedule';
+import { useToast } from '../../shared/ui/Toast';
 
 type Load = { status: 'loading' } | { status: 'failed'; message: string } | { status: 'ready'; data: BackupData };
 
@@ -19,13 +20,17 @@ export interface PlanDataApi {
   ready: ReadyPlanData | null;
   /** Reload everything from storage, e.g. after an import. */
   reload: () => Promise<void>;
-  saveOverride: (override: Override) => Promise<void>;
-  removeOverride: (key: OverrideKey) => Promise<void>;
-  saveOverrides: (overrides: readonly Override[]) => Promise<void>;
-  removeOverrides: (keys: readonly OverrideKey[]) => Promise<void>;
-  saveOneOff: (oneOff: OneOff) => Promise<void>;
-  removeOneOff: (id: string) => Promise<void>;
-  savePlan: (plan: Plan, dropOverridesOfSlots?: readonly string[]) => Promise<void>;
+  /**
+   * Writes resolve to true when saved. On failure the user sees an error toast and the result is false,
+   * so callers keep their form open instead of closing it over a lost change.
+   */
+  saveOverride: (override: Override) => Promise<boolean>;
+  removeOverride: (key: OverrideKey) => Promise<boolean>;
+  saveOverrides: (overrides: readonly Override[]) => Promise<boolean>;
+  removeOverrides: (keys: readonly OverrideKey[]) => Promise<boolean>;
+  saveOneOff: (oneOff: OneOff) => Promise<boolean>;
+  removeOneOff: (id: string) => Promise<boolean>;
+  savePlan: (plan: Plan, dropOverridesOfSlots?: readonly string[]) => Promise<boolean>;
 }
 
 const PlanDataContext = createContext<PlanDataApi | null>(null);
@@ -38,6 +43,7 @@ const messageOf = (error: unknown): string => (error instanceof Error ? error.me
  */
 export function PlanDataProvider({ children }: { children: ReactNode }) {
   const repository = useRepository();
+  const toast = useToast();
   const [load, setLoad] = useState<Load>({ status: 'loading' });
 
   const reload = useCallback(async () => {
@@ -68,42 +74,30 @@ export function PlanDataProvider({ children }: { children: ReactNode }) {
     [load],
   );
 
-  const api = useMemo<PlanDataApi>(
-    () => ({
+  const api = useMemo<PlanDataApi>(() => {
+    const write = async (operation: () => Promise<void>): Promise<boolean> => {
+      try {
+        await operation();
+      } catch (error) {
+        toast.show({ tone: 'error', message: `Couldn’t save your change. Nothing was lost. ${messageOf(error)}` });
+        return false;
+      }
+      await reload();
+      return true;
+    };
+    return {
       load,
       ready,
       reload,
-      saveOverride: async (override) => {
-        await repository.saveOverride(override);
-        await reload();
-      },
-      removeOverride: async ({ planId, slotId, week }) => {
-        await repository.removeOverride(planId, slotId, week);
-        await reload();
-      },
-      saveOverrides: async (overrides) => {
-        await repository.saveOverrides(overrides);
-        await reload();
-      },
-      removeOverrides: async (keys) => {
-        await repository.removeOverrides(keys);
-        await reload();
-      },
-      saveOneOff: async (oneOff) => {
-        await repository.saveOneOff(oneOff);
-        await reload();
-      },
-      removeOneOff: async (id) => {
-        await repository.removeOneOff(id);
-        await reload();
-      },
-      savePlan: async (plan, dropOverridesOfSlots) => {
-        await repository.savePlan(plan, dropOverridesOfSlots);
-        await reload();
-      },
-    }),
-    [load, ready, reload, repository],
-  );
+      saveOverride: (override) => write(() => repository.saveOverride(override)),
+      removeOverride: ({ planId, slotId, week }) => write(() => repository.removeOverride(planId, slotId, week)),
+      saveOverrides: (overrides) => write(() => repository.saveOverrides(overrides)),
+      removeOverrides: (keys) => write(() => repository.removeOverrides(keys)),
+      saveOneOff: (oneOff) => write(() => repository.saveOneOff(oneOff)),
+      removeOneOff: (id) => write(() => repository.removeOneOff(id)),
+      savePlan: (plan, dropOverridesOfSlots) => write(() => repository.savePlan(plan, dropOverridesOfSlots)),
+    };
+  }, [load, ready, reload, repository, toast]);
 
   return <PlanDataContext.Provider value={api}>{children}</PlanDataContext.Provider>;
 }

@@ -133,7 +133,7 @@ function Calendar({ data }: { data: ReadyPlanData }) {
             <span><i className="dot t-ez" />Running</span>
           </div>
           <div className="sep" style={{ margin: '6px 16px 0' }} />
-          <div className="scroll" style={{ paddingTop: 12 }}>
+          <div className="scroll" style={{ paddingTop: 12, paddingBottom: 96 }}>
             <div className="col g4">
               <h2 style={{ fontSize: 18, fontWeight: 700 }}>{formatDayShort(selected)}</h2>
               <span className="sm muted">{agendaSub}</span>

@@ -81,7 +81,7 @@ function WeeksList({ data, plan, today }: { data: ReadyPlanData; plan: Plan; tod
     const previous = data.overrides.filter((o) =>
       summary.resettable.some((k) => k.planId === o.planId && k.slotId === o.slotId && k.week === o.week),
     );
-    await planData.removeOverrides(summary.resettable);
+    if (!(await planData.removeOverrides(summary.resettable))) return;
     toast.show({
       message: `Week ${summary.week} reset to generated values`,
       action: { label: 'Undo', run: () => void planData.saveOverrides(previous) },

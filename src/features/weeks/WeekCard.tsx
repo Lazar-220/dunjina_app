@@ -68,8 +68,7 @@ export function WeekCard({ plan, data, summary, isCurrent, open, onToggle, editi
                   <button
                     key={workout.id}
                     type="button"
-                    className={`tag ${TYPE_META[workout.type].colorClass}`}
-                    style={{ minHeight: 44 }}
+                    className={`tag tap ${TYPE_META[workout.type].colorClass}`}
                     onClick={() => onOpenSheet({ itemRef: item.ref, mode: 'view' })}
                   >
                     <Icon name="check" size="xs" />
@@ -122,8 +121,8 @@ interface WeekRowProps {
   editing: boolean;
   onToggleEdit: () => void;
   onOpenSheet: (sheet: OpenSheet) => void;
-  onSaveOverride: (override: Override | null) => Promise<void>;
-  onReset: () => Promise<void>;
+  onSaveOverride: (override: Override | null) => Promise<boolean>;
+  onReset: () => Promise<boolean>;
 }
 
 function WeekRow({ plan, slot, workout, data, editing, onToggleEdit, onOpenSheet, onSaveOverride, onReset }: WeekRowProps) {

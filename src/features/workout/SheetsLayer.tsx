@@ -38,6 +38,7 @@ export function SheetsLayer({ data, open, onChange, onAdded }: SheetsLayerProps)
       onCancel={close}
       onAdd={async (type, date) => {
         const oneOff = await actions.addOneOff(type, date);
+        if (!oneOff) return;
         onAdded?.(oneOff);
         onChange({ itemRef: { kind: 'oneOff', id: oneOff.id }, mode: 'view' });
       }}

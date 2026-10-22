@@ -97,7 +97,6 @@ function Wizard({ data, initial, plan }: WizardProps) {
   const [slotIndex, setSlotIndex] = useState(0);
   const [visited, setVisited] = useState<ReadonlySet<string>>(new Set());
   const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
 
   const editing = plan !== null;
   const title = editing ? 'Edit plan' : 'New plan';
@@ -144,16 +143,13 @@ function Wizard({ data, initial, plan }: WizardProps) {
 
   const save = async () => {
     setSaving(true);
-    setSaveError(null);
-    try {
-      const saved = toPlan(draft, plan?.id ?? newId(), plan?.endedOn ?? null);
-      const keptSlotIds = new Set(saved.slots.map((s) => s.id));
-      const removedSlotIds = plan ? plan.slots.filter((s) => !keptSlotIds.has(s.id)).map((s) => s.id) : [];
-      await savePlan(saved, removedSlotIds);
+    const saved = toPlan(draft, plan?.id ?? newId(), plan?.endedOn ?? null);
+    const keptSlotIds = new Set(saved.slots.map((s) => s.id));
+    const removedSlotIds = plan ? plan.slots.filter((s) => !keptSlotIds.has(s.id)).map((s) => s.id) : [];
+    if (await savePlan(saved, removedSlotIds)) {
       toast.show({ message: editing ? 'Plan saved' : 'Plan created' });
       navigate({ name: 'calendar' });
-    } catch (error) {
-      setSaveError(error instanceof Error ? error.message : String(error));
+    } else {
       setSaving(false);
     }
   };
@@ -257,7 +253,6 @@ function Wizard({ data, initial, plan }: WizardProps) {
         </>
       }
     >
-      {saveError && <Banner tone="err">Couldn’t save the plan. {saveError}</Banner>}
       <StepReview
         draft={draft}
         onEditSlot={(index) => {

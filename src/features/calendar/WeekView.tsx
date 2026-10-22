@@ -56,7 +56,7 @@ export function WeekView({ weekStart, today, itemsByDate, unassigned, onOpen, on
           </div>
         </div>
       )}
-      <div className="scroll" style={{ paddingTop: 0, gap: 0 }}>
+      <div className="scroll" style={{ paddingTop: 0, gap: 0, paddingBottom: 96 }}>
         {unassigned.length > 0 && (
           <div className="dayrow" style={{ borderTop: 0 }}>
             <div className="dlab">

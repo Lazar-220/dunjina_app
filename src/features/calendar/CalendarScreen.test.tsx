@@ -282,3 +282,31 @@ describe('empty state', () => {
     await Dexie.delete(`${databaseName}-empty`);
   });
 });
+
+describe('when saving fails', () => {
+  it('tells the user, keeps the sheet and their input open, and stores nothing', async () => {
+    const failing: Repository = {
+      ...repository,
+      saveOverride: async () => {
+        throw new Error('The disk is full.');
+      },
+    };
+    const user = userEvent.setup({ advanceTimers: () => undefined });
+    render(<App repository={failing} />);
+    await screen.findByRole('heading', { name: 'October 2026' });
+    await openWorkout(user, /Easy run B/);
+    await user.click(screen.getByRole('button', { name: 'Mark as done' }));
+    const sheet = await screen.findByRole('dialog', { name: 'Mark as done: Easy run B' });
+    const km = within(sheet).getByRole('textbox', { name: 'Distance' });
+    await user.clear(km);
+    await user.type(km, '6');
+
+    await user.click(within(sheet).getByRole('button', { name: 'Save as done' }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Couldn’t save your change. Nothing was lost. The disk is full.');
+    expect(screen.getByRole('dialog', { name: 'Mark as done: Easy run B' })).toBeInTheDocument();
+    expect(within(sheet).getByRole('textbox', { name: 'Distance' })).toHaveValue('6');
+    expect(screen.queryByText('Easy run B marked done')).not.toBeInTheDocument();
+    expect(await repository.listOverrides(plan.id)).toEqual([]);
+  });
+});

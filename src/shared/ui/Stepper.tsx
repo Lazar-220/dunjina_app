@@ -51,7 +51,7 @@ export function Stepper({
     if (typed.trim() !== '' && Number.isFinite(parsed) && parsed >= min) onChange(roundValue(parsed));
   };
 
-  const classes = ['step', modified && 'mod', tone].filter(Boolean).join(' ');
+  const classes = ['step', modified && 'modified', tone].filter(Boolean).join(' ');
   return (
     <div className="field">
       <span id={labelId} className={hideLabel ? 'sr-only' : 'lbl'}>

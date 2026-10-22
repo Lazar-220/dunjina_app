@@ -7,7 +7,7 @@ export function roundValue(value: number): number {
 
 // ---------- runs: easy, long, tempo distance ----------
 
-export function nextRunKm(previousKm: number, config: RunConfig): number {
+function nextRunKm(previousKm: number, config: RunConfig): number {
   return previousKm >= config.max ? config.min : roundValue(Math.min(previousKm + config.step, config.max));
 }
 
@@ -29,7 +29,7 @@ export function plannedRunKm(config: RunConfig, week: number, overrideKm: (week:
 
 // ---------- strength: reps and weight per exercise ----------
 
-export interface RepsAndWeight {
+interface RepsAndWeight {
   reps: number;
   kg: number;
 }
@@ -37,7 +37,7 @@ export interface RepsAndWeight {
 /** Fields the user changed in one week; a missing field follows the generated value. */
 export type PartialRepsAndWeight = Partial<RepsAndWeight>;
 
-export function nextStrength(previous: RepsAndWeight, config: ExerciseConfig): RepsAndWeight {
+function nextStrength(previous: RepsAndWeight, config: ExerciseConfig): RepsAndWeight {
   if (previous.reps >= config.maxReps) {
     return { reps: config.minReps, kg: roundValue(previous.kg + config.kgStep) };
   }

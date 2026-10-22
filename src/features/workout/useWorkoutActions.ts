@@ -18,10 +18,10 @@ export function useWorkoutActions(data: ReadyPlanData) {
   const { saveOverride, removeOverride, saveOneOff, removeOneOff } = planData;
 
   const replaceOverride = useCallback(
-    async (ref: PlanRef, next: Override | null, message: string) => {
+    async (ref: PlanRef, next: Override | null, message: string): Promise<boolean> => {
       const previous = overrideFor(data.index, ref.slotId, ref.week);
-      if (next) await saveOverride(next);
-      else await removeOverride(ref);
+      const saved = next ? await saveOverride(next) : await removeOverride(ref);
+      if (!saved) return false;
       toast.show({
         message,
         action: {
@@ -29,15 +29,17 @@ export function useWorkoutActions(data: ReadyPlanData) {
           run: () => void (previous ? saveOverride(previous) : removeOverride(ref)),
         },
       });
+      return true;
     },
     [data.index, removeOverride, saveOverride, toast],
   );
 
   const replaceOneOff = useCallback(
-    async (previous: OneOff, next: OneOff | null, message: string) => {
-      if (next) await saveOneOff(next);
-      else await removeOneOff(previous.id);
+    async (previous: OneOff, next: OneOff | null, message: string): Promise<boolean> => {
+      const saved = next ? await saveOneOff(next) : await removeOneOff(previous.id);
+      if (!saved) return false;
       toast.show({ message, action: { label: 'Undo', run: () => void saveOneOff(previous) } });
+      return true;
     },
     [removeOneOff, saveOneOff, toast],
   );
@@ -56,18 +58,17 @@ export function useWorkoutActions(data: ReadyPlanData) {
   return useMemo(
     () => ({
       /** Saves the form: a full snapshot when done, differences from the plan otherwise. */
-      async saveForm(item: CalendarItem, form: WorkoutValues, done: boolean) {
+      async saveForm(item: CalendarItem, form: WorkoutValues, done: boolean): Promise<boolean> {
         if (item.ref.kind === 'oneOff') {
           const oneOff = oneOffOf(item);
-          await replaceOneOff(
+          return replaceOneOff(
             oneOff,
             { ...oneOff, done, details: valuesToOneOffDetails(form) },
             done && !oneOff.done ? `${item.title} marked done` : 'Changes saved',
           );
-          return;
         }
         const { ref } = item;
-        if (!item.planned) return;
+        if (!item.planned) return false;
         const next = buildOverride({
           existing: overrideFor(data.index, ref.slotId, ref.week),
           planId: ref.planId,
@@ -77,26 +78,25 @@ export function useWorkoutActions(data: ReadyPlanData) {
           form,
           done,
         });
-        await replaceOverride(ref, next, done && item.status !== 'done' ? `${item.title} marked done` : 'Changes saved');
+        return replaceOverride(ref, next, done && item.status !== 'done' ? `${item.title} marked done` : 'Changes saved');
       },
 
       /** Stores an override built elsewhere (null removes it), e.g. by the inline editor of the Weeks list. */
-      async applyOverride(item: CalendarItem, next: Override | null) {
-        if (item.ref.kind !== 'plan') return;
-        await replaceOverride(item.ref, next, 'Changes saved');
+      async applyOverride(item: CalendarItem, next: Override | null): Promise<boolean> {
+        if (item.ref.kind !== 'plan') return false;
+        return replaceOverride(item.ref, next, 'Changes saved');
       },
 
-      async reset(item: CalendarItem) {
-        if (item.ref.kind !== 'plan') return;
-        await replaceOverride(item.ref, null, 'Reset to generated values');
+      async reset(item: CalendarItem): Promise<boolean> {
+        if (item.ref.kind !== 'plan') return false;
+        return replaceOverride(item.ref, null, 'Reset to generated values');
       },
 
-      async move(item: CalendarItem, date: IsoDate) {
+      async move(item: CalendarItem, date: IsoDate): Promise<boolean> {
         const message = `Moved to ${formatDayShort(date)}`;
         if (item.ref.kind === 'oneOff') {
           const oneOff = oneOffOf(item);
-          await replaceOneOff(oneOff, { ...oneOff, date }, message);
-          return;
+          return replaceOneOff(oneOff, { ...oneOff, date }, message);
         }
         const { ref } = item;
         const existing = overrideFor(data.index, ref.slotId, ref.week) ?? {
@@ -104,14 +104,13 @@ export function useWorkoutActions(data: ReadyPlanData) {
           slotId: ref.slotId,
           week: ref.week,
         };
-        await replaceOverride(ref, { ...existing, date }, message);
+        return replaceOverride(ref, { ...existing, date }, message);
       },
 
-      async remove(item: CalendarItem) {
+      async remove(item: CalendarItem): Promise<boolean> {
         const message = `${item.title} deleted`;
         if (item.ref.kind === 'oneOff') {
-          await replaceOneOff(oneOffOf(item), null, message);
-          return;
+          return replaceOneOff(oneOffOf(item), null, message);
         }
         const { ref } = item;
         const existing = overrideFor(data.index, ref.slotId, ref.week) ?? {
@@ -119,13 +118,13 @@ export function useWorkoutActions(data: ReadyPlanData) {
           slotId: ref.slotId,
           week: ref.week,
         };
-        await replaceOverride(ref, { ...existing, deleted: true }, message);
+        return replaceOverride(ref, { ...existing, deleted: true }, message);
       },
 
-      async addOneOff(type: SlotType, date: IsoDate): Promise<OneOff> {
+      /** The new one-off workout, or null when it could not be saved (the user has been told). */
+      async addOneOff(type: SlotType, date: IsoDate): Promise<OneOff | null> {
         const oneOff: OneOff = { id: newId(), date, type, done: false, details: defaultOneOffDetails(type) };
-        await saveOneOff(oneOff);
-        return oneOff;
+        return (await saveOneOff(oneOff)) ? oneOff : null;
       },
     }),
     [data.index, oneOffOf, replaceOneOff, replaceOverride, saveOneOff],

@@ -30,9 +30,9 @@ export function WorkoutSheetHost({ data, itemRef, initialMode = 'view', onClose 
   if (!item) return null;
 
   const toView = () => (initialMode === 'view' ? setMode('view') : onClose());
-  const finish = async (action: () => Promise<void>) => {
-    await action();
-    onClose();
+  /** Closes the sheet only when the change was saved; otherwise the user stays with their input. */
+  const finish = async (action: () => Promise<boolean>) => {
+    if (await action()) onClose();
   };
 
   if (mode === 'done' || mode === 'edit') {
@@ -42,10 +42,7 @@ export function WorkoutSheetHost({ data, itemRef, initialMode = 'view', onClose 
         source={planSource(data, item)}
         mode={mode}
         onCancel={toView}
-        onSave={async (form, done) => {
-          await actions.saveForm(item, form, done);
-          onClose();
-        }}
+        onSave={(form, done) => finish(() => actions.saveForm(item, form, done))}
       />
     );
   }
@@ -60,10 +57,7 @@ export function WorkoutSheetHost({ data, itemRef, initialMode = 'view', onClose 
           titlesOnDate(itemsBetween({ plans: data.plans, oneOffs: data.oneOffs, index: data.index }, date, date), date, excludeKey)
         }
         onCancel={toView}
-        onMove={async (date) => {
-          await actions.move(item, date);
-          onClose();
-        }}
+        onMove={(date) => finish(() => actions.move(item, date))}
       />
     );
   }

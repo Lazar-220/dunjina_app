@@ -89,3 +89,17 @@ All of these are unit tests.
 | Intervals, Draft 2 = 5 x 400 m, 90 s; user does W2 at 14 km/h with 4 intervals | W3 D3@14, W4 D1@14.5, W5 D2@14.5, and D2 in W5 is again 5 x 400 m, 90 s |
 | Open-ended plan | week 200 computes without error |
 | Plan with an end date | no workouts after it |
+
+## Plans, ending and the week list
+
+- A plan is active until it is ended or its end date has passed. Only one plan is active at a time; creating a new plan while one is active asks the user to end the current one first.
+- "End plan" sets the last day of the plan (today or a picked date). Done workouts and edited values stay. Drafts after that day disappear. A plan can never end before its last done workout, and ending or editing the end date earlier than that workout is blocked with a message. The engine itself never hides a done workout.
+- An ended plan cannot be restarted or edited; "Duplicate as new plan" copies its slots into a new plan.
+- Editing the active plan keeps its start date. A slot with done workouts cannot be removed; removing another slot also removes that slot's saved edits.
+- The Weeks list shows the active plan, computed on demand: it grows forward without limit (or to the last week of a plan with an end date) and can show earlier weeks.
+- "Reset week to generated values" removes edits, moves and deletions of not-done workouts of that week and keeps done workouts.
+
+## Drag and drop
+
+- Week view only. Long-press (350 ms) lifts a workout; dragging over a day and releasing moves it to that day; moving before the press completes is scrolling; Escape cancels. Past days are allowed.
+- Every workout row has a "⋯" button that opens "Move to…", the non-drag alternative. Moving changes only that week's date.

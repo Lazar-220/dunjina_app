@@ -20,8 +20,8 @@ interface InlineRunEditorProps {
   generatedDate: IsoDate | null;
   index: OverrideIndex;
   existing: Override | undefined;
-  onSave: (next: Override | null) => Promise<void>;
-  onReset: () => Promise<void>;
+  onSave: (next: Override | null) => Promise<boolean>;
+  onReset: () => Promise<boolean>;
   onClose: () => void;
 }
 
@@ -114,7 +114,7 @@ export function InlineRunEditor({
           className="btn p"
           style={{ minHeight: 46 }}
           onClick={() => {
-            void onSave(candidate).then(onClose);
+            void onSave(candidate).then((saved) => saved && onClose());
           }}
         >
           Done

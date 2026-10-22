@@ -23,7 +23,7 @@ function Plans({ data }: { data: ReadyPlanData }) {
   const plans = sortPlans(data.plans, today);
 
   const endPlan = async (plan: Plan, endedOn: IsoDate) => {
-    await planData.savePlan({ ...plan, endedOn });
+    if (!(await planData.savePlan({ ...plan, endedOn }))) return;
     setEnding(null);
     toast.show({
       message: `“${plan.name}” ended`,

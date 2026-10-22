@@ -2,9 +2,9 @@ import type { IntervalDraft, IntervalsSlot, Override, Plan, RunConfig, RunSlot, 
 import type { Weekday } from './dates';
 import { computeSlotWeek, indexOverrides, type Workout } from './schedule';
 
-export const PLAN_ID = 'plan-1';
+const PLAN_ID = 'plan-1';
 /** A Monday. */
-export const START = '2026-10-19';
+const START = '2026-10-19';
 
 export function makePlan(slots: Slot[], overrides: Partial<Plan> = {}): Plan {
   return { id: PLAN_ID, name: 'Test plan', startDate: START, endDate: null, endedOn: null, slots, ...overrides };

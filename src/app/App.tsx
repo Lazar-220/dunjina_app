@@ -38,11 +38,11 @@ export function App({ repository }: { repository: Repository }) {
     <RepositoryProvider repository={repository}>
       <div className="app">
         <SettingsProvider>
-          <PlanDataProvider>
-            <ToastProvider>
+          <ToastProvider>
+            <PlanDataProvider>
               <Shell />
-            </ToastProvider>
-          </PlanDataProvider>
+            </PlanDataProvider>
+          </ToastProvider>
         </SettingsProvider>
       </div>
     </RepositoryProvider>
