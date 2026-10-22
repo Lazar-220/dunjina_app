@@ -33,7 +33,8 @@ Every assumption made while building v1. Format: **decision** — why. Items mar
 - Overrides whose `kind` does not match the slot type are ignored by the engine instead of throwing.
 - `planned` is the value generated from the previous week's final value, ignoring that week's own override; `actual` applies the override. A workout is `edited` when they differ, so marking done with unchanged values is not an edit.
 - Workout status: `draft` (no override), `confirmed` (values edited or date moved, not done), `done`.
-- Plan end: `endDate` and `endedOn` (set by "End plan") both cut the plan; the earlier one wins. Workouts dated after it do not exist, even if done.
+- Plan end: `endDate` and `endedOn` (set by "End plan") both cut the plan; the earlier one wins. Drafts and edited-but-not-done workouts after it do not exist.
+- **A plan's end never hides a done workout.** Two layers: (1) *block* — `validatePlanEnd` rejects an end date (typed in the plan editor, or today for "End plan") earlier than the latest done workout, with the message "The plan can't end before your last done workout on Thu 22 Oct 2026. Pick that date or later." The end date stays unchanged until the user picks a valid one; I chose blocking over silent clamping so the user stays in control of the date. (2) *safety net* — the engine itself never cuts a done workout, so backups imported from elsewhere or a done workout moved past the end still show. An unassigned done workout counts as the Monday of its week for this rule. Deleting a done workout still removes it.
 - Floats are rounded to 3 decimals after every addition.
 
 ## Cross-check against `design/handoff/.../reference/progression.ts`

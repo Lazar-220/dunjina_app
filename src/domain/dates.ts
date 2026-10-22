@@ -70,3 +70,12 @@ export function dateOfWeekday(planStart: IsoDate, week: number, weekday: Weekday
 export function compareDates(a: IsoDate, b: IsoDate): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
+
+const WEEKDAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/** "Thu 22 Oct 2026" */
+export function formatDate(date: IsoDate): string {
+  const [year, month, day] = date.split('-').map(Number);
+  return `${WEEKDAY_NAMES[weekdayOf(date)]} ${day} ${MONTH_NAMES[(month ?? 1) - 1]} ${year}`;
+}

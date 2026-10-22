@@ -1,5 +1,6 @@
-import { compareDates, type IsoDate } from './dates';
-import type { ExerciseConfig, IntervalDraft, RunConfig } from './schema';
+import { compareDates, formatDate, type IsoDate } from './dates';
+import type { ExerciseConfig, IntervalDraft, Plan, RunConfig } from './schema';
+import { lastDoneDate, type OverrideIndex } from './schedule';
 
 /**
  * error: the form cannot be saved or advanced (the data would be structurally unusable).
@@ -94,6 +95,22 @@ export function validatePlanBasics(basics: { name: string; startDate: IsoDate; e
     issues.push({ field: 'endDate', severity: 'error', message: 'End date must be after the start date.' });
   }
   return issues;
+}
+
+/**
+ * Blocks an end date (typed in, or today for "End plan") that would hide a done workout.
+ * The plan keeps its end date unchanged until the user picks a date on or after the last done workout.
+ */
+export function validatePlanEnd(plan: Plan, index: OverrideIndex, proposedEnd: IsoDate): Issue[] {
+  const lastDone = lastDoneDate(plan, index);
+  if (lastDone === null || compareDates(proposedEnd, lastDone) >= 0) return [];
+  return [
+    {
+      field: 'endDate',
+      severity: 'error',
+      message: `The plan can't end before your last done workout on ${formatDate(lastDone)}. Pick that date or later.`,
+    },
+  ];
 }
 
 export const hasErrors = (issues: readonly Issue[]): boolean => issues.some((issue) => issue.severity === 'error');

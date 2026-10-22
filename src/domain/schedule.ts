@@ -251,18 +251,23 @@ function statusOf(override: Override | undefined): WorkoutStatus {
 
 // ---------- public API ----------
 
-/** One slot's workout in one week, or null when it is deleted or falls outside the plan. */
+function isPastEnd(plan: Plan, week: number, date: IsoDate | null): boolean {
+  const end = effectiveEndDate(plan);
+  if (end === null) return false;
+  return compareDates(date ?? weekStartDate(plan.startDate, week), end) > 0;
+}
+
+/**
+ * One slot's workout in one week, or null when it is deleted or falls outside the plan.
+ * A done workout is never cut by the plan end: logged history stays visible.
+ */
 export function computeSlotWeek(plan: Plan, slot: Slot, week: number, index: OverrideIndex): Workout | null {
-  const last = lastWeekOf(plan);
-  if (week < 1 || (last !== null && week > last)) return null;
+  if (week < 1) return null;
   const override = overrideFor(index, slot.id, week);
   if (override?.deleted) return null;
 
   const date = resolveDate(plan, slot, week, override);
-  const end = effectiveEndDate(plan);
-  if (end !== null && (date === null ? compareDates(weekStartDate(plan.startDate, week), end) > 0 : compareDates(date, end) > 0)) {
-    return null;
-  }
+  if (!override?.done && isPastEnd(plan, week, date)) return null;
 
   const { planned, actual } = valuesFor(slot, week, index);
   return {
@@ -326,4 +331,22 @@ export function withOverride(index: OverrideIndex, override: Override): Override
   slotOverrides.set(override.week, override);
   next.set(override.slotId, slotOverrides);
   return next;
+}
+
+/**
+ * Latest date that must stay inside the plan because a done workout sits on it
+ * (an unassigned done workout counts as the Monday of its week). Null when nothing is done.
+ */
+export function lastDoneDate(plan: Plan, index: OverrideIndex): IsoDate | null {
+  let latest: IsoDate | null = null;
+  for (const slot of plan.slots) {
+    for (const [week, override] of index.get(slot.id) ?? []) {
+      if (!override.done) continue;
+      const workout = computeSlotWeek(plan, slot, week, index);
+      if (!workout) continue;
+      const date = workout.date ?? weekStartDate(plan.startDate, week);
+      if (latest === null || compareDates(date, latest) > 0) latest = date;
+    }
+  }
+  return latest;
 }

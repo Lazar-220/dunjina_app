@@ -3,6 +3,7 @@ import {
   compareDates,
   dateOfWeekday,
   diffDays,
+  formatDate,
   isValidIsoDate,
   mondayOf,
   weekdayOf,
@@ -117,5 +118,12 @@ describe('isValidIsoDate and compareDates', () => {
     expect(compareDates('2026-10-24', '2026-10-25')).toBe(-1);
     expect(compareDates('2026-10-25', '2026-10-25')).toBe(0);
     expect(compareDates('2026-10-26', '2026-10-25')).toBe(1);
+  });
+});
+
+describe('formatDate', () => {
+  it('writes weekday, day, month and year', () => {
+    expect(formatDate('2026-10-22')).toBe('Thu 22 Oct 2026');
+    expect(formatDate('2027-01-03')).toBe('Sun 3 Jan 2027');
   });
 });

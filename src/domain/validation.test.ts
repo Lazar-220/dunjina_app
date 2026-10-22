@@ -1,5 +1,13 @@
-import { hasErrors, validateExerciseConfig, validateIntervalDrafts, validatePlanBasics, validateRunConfig } from './validation';
-import { squatSlot } from './test-fixtures';
+import { indexOverrides } from './schedule';
+import { easyRunSlot, makePlan, override, squatSlot } from './test-fixtures';
+import {
+  hasErrors,
+  validateExerciseConfig,
+  validateIntervalDrafts,
+  validatePlanBasics,
+  validatePlanEnd,
+  validateRunConfig,
+} from './validation';
 
 describe('validateRunConfig', () => {
   it('accepts a sound config without issues', () => {
@@ -84,5 +92,33 @@ describe('validateIntervalDrafts', () => {
   it('requires at least one draft', () => {
     expect(hasErrors(validateIntervalDrafts([]))).toBe(true);
     expect(validateIntervalDrafts([{ count: 5, distanceM: 400, restS: 90 }])).toEqual([]);
+  });
+});
+
+describe('validatePlanEnd', () => {
+  const plan = makePlan([easyRunSlot()]);
+  const index = indexOverrides([override('easy', 3, { done: true, values: { kind: 'run', km: 10 } })]);
+
+  it('blocks an end date before the last done workout and names its date', () => {
+    expect(validatePlanEnd(plan, index, '2026-11-03')).toEqual([
+      {
+        field: 'endDate',
+        severity: 'error',
+        message: "The plan can't end before your last done workout on Wed 4 Nov 2026. Pick that date or later.",
+      },
+    ]);
+  });
+
+  it('blocks "End plan" today when a workout later than today is already done', () => {
+    expect(hasErrors(validatePlanEnd(plan, index, '2026-10-22'))).toBe(true);
+  });
+
+  it('allows ending on the day of the last done workout or later', () => {
+    expect(validatePlanEnd(plan, index, '2026-11-04')).toEqual([]);
+    expect(validatePlanEnd(plan, index, '2027-01-01')).toEqual([]);
+  });
+
+  it('allows any end date while nothing is done', () => {
+    expect(validatePlanEnd(plan, indexOverrides([]), '2026-10-20')).toEqual([]);
   });
 });

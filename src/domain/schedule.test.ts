@@ -3,6 +3,7 @@ import {
   computeWeek,
   effectiveEndDate,
   indexOverrides,
+  lastDoneDate,
   lastWeekOf,
   workoutsBetween,
 } from './schedule';
@@ -143,6 +144,52 @@ describe('plan end', () => {
 
   it('returns nothing before week 1', () => {
     expect(computeWeek(makePlan([easyRunSlot()]), 0, emptyIndex)).toEqual([]);
+  });
+});
+
+describe('plan end never hides a done workout', () => {
+  const doneWeek3 = override('easy', 3, { done: true, values: { kind: 'run', km: 10 } });
+
+  it('keeps a done workout that lies after the end date, while drafts after it stay cut', () => {
+    const plan = makePlan([easyRunSlot(), squatSlot()], { endDate: '2026-11-01' });
+    const index = indexOverrides([doneWeek3]);
+    expect(computeWeek(plan, 3, index).map((w) => [w.slotId, w.status])).toEqual([['easy', 'done']]);
+    expect(computeWeek(plan, 4, index)).toEqual([]);
+    expect(workoutsBetween(plan, '2026-11-02', '2026-12-31', index).map((w) => w.id)).toEqual(['easy:3']);
+  });
+
+  it('keeps a done workout when the plan was ended before it', () => {
+    const plan = makePlan([easyRunSlot()], { endedOn: '2026-10-20' });
+    expect(computeWeek(plan, 3, indexOverrides([doneWeek3])).map((w) => w.status)).toEqual(['done']);
+    expect(computeWeek(plan, 3, emptyIndex)).toEqual([]);
+  });
+
+  it('keeps a done workout that was moved past the end date', () => {
+    const plan = makePlan([easyRunSlot()], { endDate: '2026-11-01' });
+    const moved = override('easy', 1, { done: true, date: '2026-11-20', values: { kind: 'run', km: 8 } });
+    expect(computeWeek(plan, 1, indexOverrides([moved])).map((w) => w.date)).toEqual(['2026-11-20']);
+  });
+
+  it('still lets a deleted done workout disappear', () => {
+    const plan = makePlan([easyRunSlot()], { endDate: '2026-11-01' });
+    const deleted = override('easy', 3, { done: true, deleted: true });
+    expect(computeWeek(plan, 3, indexOverrides([deleted]))).toEqual([]);
+  });
+
+  it('reports the latest date that must stay inside the plan', () => {
+    const plan = makePlan([easyRunSlot(), squatSlot()]);
+    expect(lastDoneDate(plan, emptyIndex)).toBeNull();
+    const index = indexOverrides([
+      doneWeek3,
+      override('lower', 2, { done: true, values: { kind: 'strength', exercises: [] } }),
+      override('easy', 5, { values: { kind: 'run', km: 9 } }),
+    ]);
+    expect(lastDoneDate(plan, index)).toBe('2026-11-04');
+  });
+
+  it('counts an unassigned done workout as the Monday of its week', () => {
+    const plan = makePlan([easyRunSlot({}, null)]);
+    expect(lastDoneDate(plan, indexOverrides([doneWeek3]))).toBe('2026-11-02');
   });
 });
 
