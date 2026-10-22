@@ -76,6 +76,19 @@ describe('Dexie repository', () => {
     expect((await repository.listOverrides(plan.id)).map((o) => o.slotId)).toEqual([other.slotId]);
   });
 
+  it('saves and removes several overrides at once', async () => {
+    const data = sampleData();
+    const [plan] = data.plans;
+    const [first] = data.overrides;
+    if (!plan || !first) throw new Error('Incomplete sample.');
+    const more = [2, 3, 4].map((week) => ({ ...first, week, done: undefined, values: undefined, date: '2026-11-0' + week }));
+    await repository.saveOverrides(more);
+    expect((await repository.listOverrides(plan.id)).map((o) => o.week).sort()).toEqual([2, 3, 4]);
+
+    await repository.removeOverrides([more[0], more[2]].flatMap((o) => (o ? [o] : [])));
+    expect((await repository.listOverrides(plan.id)).map((o) => o.week)).toEqual([3]);
+  });
+
   it('persists settings', async () => {
     await repository.saveSettings({ theme: 'dark', lastBackupDate: '2026-10-22' });
     expect(await repository.getSettings()).toEqual({ theme: 'dark', lastBackupDate: '2026-10-22' });

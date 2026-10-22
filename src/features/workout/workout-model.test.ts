@@ -12,7 +12,7 @@ import {
 } from '../../domain/test-fixtures';
 import { oneOffToValues, valuesToOneOffDetails } from './calendar-item';
 import { describeValues } from './describe';
-import { buildOverride, differencesOf, snapshotOf } from './edit-model';
+import { buildOverride, differencesOf, distanceOf, snapshotOf, withDistance, withMovedDate } from './edit-model';
 import { impactGroups } from './impact-view';
 
 const strength = (reps: number, kg: number): WorkoutValues => ({
@@ -203,5 +203,34 @@ describe('one-off conversion', () => {
       { kind: 'intervals' as const, count: 5, distanceM: 400, restS: 90, speedKmh: 12, warmupKm: 2, cooldownKm: 1.5 },
     ];
     for (const d of details) expect(valuesToOneOffDetails(oneOffToValues(d))).toEqual(d);
+  });
+});
+
+describe('withMovedDate', () => {
+  const key = { planId: 'plan-1', slotId: 'easy', week: 2 };
+
+  it('creates a date-only override for a move', () => {
+    expect(withMovedDate(null, key, '2026-10-30', '2026-10-28')).toEqual({ ...key, date: '2026-10-30' });
+  });
+
+  it('keeps the values of an existing override', () => {
+    const existing: Override = { ...key, values: { kind: 'run', km: 7 } };
+    expect(withMovedDate(existing, key, '2026-10-30', '2026-10-28')).toEqual({ ...existing, date: '2026-10-30' });
+  });
+
+  it('drops the date when moved back to the generated day, and the whole override when nothing is left', () => {
+    expect(withMovedDate({ ...key, date: '2026-10-30' }, key, '2026-10-28', '2026-10-28')).toBeNull();
+    const edited: Override = { ...key, date: '2026-10-30', values: { kind: 'run', km: 7 } };
+    expect(withMovedDate(edited, key, '2026-10-28', '2026-10-28')).toEqual({ ...key, values: { kind: 'run', km: 7 } });
+  });
+});
+
+describe('distanceOf and withDistance', () => {
+  it('read and change the distance of runs and tempo workouts only', () => {
+    expect(distanceOf({ kind: 'run', km: 9 })).toBe(9);
+    expect(distanceOf({ kind: 'tempo', km: 3, warmupKm: 2, cooldownKm: 1.5 })).toBe(3);
+    expect(distanceOf(strength(8, 60))).toBeNull();
+    expect(withDistance({ kind: 'tempo', km: 3, warmupKm: 2, cooldownKm: 1.5 }, 5)).toEqual({ kind: 'tempo', km: 5, warmupKm: 2, cooldownKm: 1.5 });
+    expect(withDistance(strength(8, 60), 5)).toEqual(strength(8, 60));
   });
 });

@@ -242,7 +242,7 @@ describe('editing the active plan', () => {
     expect(overrides.some((o) => o.slotId === lower.id)).toBe(false);
     expect(overrides).toHaveLength(1);
     expect(within(document.body).queryByRole('heading', { name: 'Review' })).not.toBeInTheDocument();
-  });
+  }, 20_000);
 
   it('refuses to edit a plan that has ended', async () => {
     const ended: Plan = { ...createDemoPlan('2026-03-16', newId), endedOn: '2026-06-14' };

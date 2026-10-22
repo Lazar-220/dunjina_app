@@ -1,0 +1,13 @@
+.whead{width:100%;min-height:64px;padding:12px 14px;display:flex;align-items:center;gap:10px;text-align:left}
+.wbody{padding:0 12px 12px;display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line)}
+.wrow{display:flex;flex-direction:column;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.wrow:last-of-type{border-bottom:0}
+.wdb{min-width:46px;height:44px;border-radius:12px;border:1.5px solid var(--line2);background:var(--surface);font-weight:650;font-size:14px;display:grid;place-items:center;flex:none}
+.edp{margin-left:42px;padding:12px;border-radius:16px;background:var(--surface2);display:flex;flex-direction:column;gap:12px}
+.dgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dgrid button{min-height:44px;border-radius:11px;border:1.5px solid var(--line2);background:var(--surface);font-size:12px;font-weight:650;display:grid;place-items:center}
+.dgrid button.on{background:var(--btn);color:var(--on-btn);border-color:var(--btn)}
+.imp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.imp div{background:var(--surface);border-radius:11px;padding:6px 8px;display:flex;flex-direction:column;gap:1px;font-size:13px}
+.imp small{font-size:12px;color:var(--ink2);font-weight:600}
+.wlink{display:flex;gap:8px;min-width:0;flex:1;align-items:flex-start;min-height:44px;text-align:left}

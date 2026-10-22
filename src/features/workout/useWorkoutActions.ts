@@ -80,6 +80,12 @@ export function useWorkoutActions(data: ReadyPlanData) {
         await replaceOverride(ref, next, done && item.status !== 'done' ? `${item.title} marked done` : 'Changes saved');
       },
 
+      /** Stores an override built elsewhere (null removes it), e.g. by the inline editor of the Weeks list. */
+      async applyOverride(item: CalendarItem, next: Override | null) {
+        if (item.ref.kind !== 'plan') return;
+        await replaceOverride(item.ref, next, 'Changes saved');
+      },
+
       async reset(item: CalendarItem) {
         if (item.ref.kind !== 'plan') return;
         await replaceOverride(item.ref, null, 'Reset to generated values');

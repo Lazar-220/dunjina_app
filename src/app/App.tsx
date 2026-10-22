@@ -2,13 +2,14 @@ import { RepositoryProvider } from '../data/RepositoryContext';
 import type { Repository } from '../data/repository';
 import { CalendarScreen } from '../features/calendar/CalendarScreen';
 import { PlanDataProvider } from '../features/plan-data/PlanDataProvider';
+import { WeeksScreen } from '../features/weeks/WeeksScreen';
+import { PlansScreen } from '../features/plans/PlansScreen';
 import { SettingsProvider } from '../features/settings/SettingsProvider';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { WizardScreen } from '../features/wizard/WizardScreen';
 import { isTab, useRoute } from '../shared/router';
 import { TabBar } from '../shared/ui/TabBar';
 import { ToastProvider } from '../shared/ui/Toast';
-import { PendingScreen } from './PendingScreen';
 
 function Shell() {
   const route = useRoute();
@@ -23,8 +24,8 @@ function Shell() {
       return (
         <>
           {route.name === 'calendar' && <CalendarScreen />}
-          {route.name === 'weeks' && <PendingScreen title="Weeks" />}
-          {route.name === 'plans' && <PendingScreen title="Plans" />}
+          {route.name === 'weeks' && <WeeksScreen />}
+          {route.name === 'plans' && <PlansScreen />}
           {route.name === 'settings' && <SettingsScreen />}
           {isTab(route) && <TabBar current={route.name} />}
         </>

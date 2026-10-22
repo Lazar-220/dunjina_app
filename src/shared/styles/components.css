@@ -175,3 +175,5 @@ input.inp{outline:0}
 .empty-week span{height:56px;border-radius:12px;border:1.5px dashed var(--line2);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:7px;gap:3px;font-size:12px;font-weight:600;color:var(--ink2)}
 button.empty-slot{background:transparent;width:100%}
 .scroll>*{flex-shrink:0}
+.wk-main{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.wk.lift{position:fixed;pointer-events:none;z-index:20}

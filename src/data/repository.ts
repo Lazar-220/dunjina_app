@@ -11,6 +11,9 @@ export interface Repository {
   listOverrides(planId: string): Promise<Override[]>;
   saveOverride(override: Override): Promise<void>;
   removeOverride(planId: string, slotId: string, week: number): Promise<void>;
+  /** Several overrides in one transaction, e.g. when a whole week is reset or restored. */
+  saveOverrides(overrides: readonly Override[]): Promise<void>;
+  removeOverrides(keys: readonly Pick<Override, 'planId' | 'slotId' | 'week'>[]): Promise<void>;
 
   listOneOffs(): Promise<OneOff[]>;
   saveOneOff(oneOff: OneOff): Promise<void>;

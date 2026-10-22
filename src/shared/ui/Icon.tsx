@@ -15,10 +15,14 @@ const PATHS = {
   back: 'M15 5l-7 7 7 7',
   forward: 'M9 5l7 7-7 7',
   down: 'M5 9l7 7 7-7',
+  up: 'M5 15l7-7 7 7',
   more: 'M5 12h.01M12 12h.01M19 12h.01',
+  grip: 'M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01',
   edit: 'M4 20l1-4L16 5l3 3L8 19l-4 1z',
   move: 'M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4',
   trash: 'M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13',
+  undo: 'M4 9h11a5 5 0 0 1 0 10H9M4 9l4-4M4 9l4 4',
+  copy: 'M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2',
 } as const;
 
 export type IconName = keyof typeof PATHS;
@@ -38,7 +42,8 @@ export function Icon({ name, size = 'm' }: { name: IconName; size?: IconSize }) 
         </>
       )}
       {name === 'info' && <circle cx="12" cy="12" r="9" />}
-      <path d={PATHS[name]} style={name === 'more' ? { strokeWidth: 3.2 } : undefined} />
+      {name === 'copy' && <rect x="8" y="8" width="12" height="12" rx="3" />}
+      <path d={PATHS[name]} style={name === 'more' || name === 'grip' ? { strokeWidth: 3.2 } : undefined} />
     </svg>
   );
 }

@@ -75,6 +75,12 @@ export function createDexieRepository(databaseName = 'training-planner'): Reposi
     async removeOverride(planId, slotId, week) {
       await db.overrides.delete([planId, slotId, week]);
     },
+    async saveOverrides(overrides) {
+      await db.overrides.bulkPut([...overrides]);
+    },
+    async removeOverrides(keys) {
+      await db.overrides.bulkDelete(keys.map(({ planId, slotId, week }): [string, string, number] => [planId, slotId, week]));
+    },
 
     async listOneOffs() {
       return parseRows('one-off workouts', oneOffSchema, await db.oneOffs.toArray());

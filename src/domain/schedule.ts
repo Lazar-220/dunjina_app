@@ -248,6 +248,11 @@ function resolveDate(plan: Plan, slot: Slot, week: number, override: Override | 
   return compareDates(date, plan.startDate) < 0 ? plan.startDate : date;
 }
 
+/** The date a workout has before the user moves it: the slot's weekday of that week, or null without a weekday. */
+export function generatedDate(plan: Plan, slot: Slot, week: number): IsoDate | null {
+  return resolveDate(plan, slot, week, undefined);
+}
+
 function sameValues(a: WorkoutValues, b: WorkoutValues): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }

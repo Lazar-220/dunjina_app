@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react';
 import type { SlotType } from '../../domain/schema';
 import { TYPE_META } from '../workout-types';
 import { Icon } from './Icon';
@@ -19,15 +20,31 @@ interface WorkoutRowProps {
   muted?: boolean;
   /** Extra action button, e.g. "More actions for Easy run". */
   menu?: { label: string; onClick: () => void };
+  /** Event handlers that make the row draggable (long press). */
+  gestureProps?: HTMLAttributes<HTMLButtonElement>;
+  /** Draw the row as the empty place a lifted workout left behind. */
+  ghost?: boolean;
 }
 
-export function WorkoutRow({ type, title, detail, status, edited, onOpen, statusPill = false, muted = false, menu }: WorkoutRowProps) {
-  const classes = ['wk', TYPE_META[type].colorClass, status !== 'confirmed' && status, muted && 'past']
+export function WorkoutRow({
+  type,
+  title,
+  detail,
+  status,
+  edited,
+  onOpen,
+  statusPill = false,
+  muted = false,
+  menu,
+  gestureProps,
+  ghost = false,
+}: WorkoutRowProps) {
+  const classes = ['wk', TYPE_META[type].colorClass, status !== 'confirmed' && status, muted && 'past', ghost && 'ghost']
     .filter(Boolean)
     .join(' ');
   return (
     <div className={classes}>
-      <button type="button" className="wk-main" onClick={onOpen}>
+      <button type="button" className="wk-main" onClick={onOpen} {...gestureProps}>
         <TypeBadge type={type} draft={status === 'draft'} />
         <span className="grow col">
           <span className="nm r g6">

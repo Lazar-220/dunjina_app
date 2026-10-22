@@ -11,6 +11,8 @@ export interface ReadyPlanData extends BackupData {
   index: OverrideIndex;
 }
 
+export type OverrideKey = Pick<Override, 'planId' | 'slotId' | 'week'>;
+
 export interface PlanDataApi {
   load: Load;
   /** Set once storage has been read. */
@@ -18,7 +20,9 @@ export interface PlanDataApi {
   /** Reload everything from storage, e.g. after an import. */
   reload: () => Promise<void>;
   saveOverride: (override: Override) => Promise<void>;
-  removeOverride: (key: Pick<Override, 'planId' | 'slotId' | 'week'>) => Promise<void>;
+  removeOverride: (key: OverrideKey) => Promise<void>;
+  saveOverrides: (overrides: readonly Override[]) => Promise<void>;
+  removeOverrides: (keys: readonly OverrideKey[]) => Promise<void>;
   saveOneOff: (oneOff: OneOff) => Promise<void>;
   removeOneOff: (id: string) => Promise<void>;
   savePlan: (plan: Plan, dropOverridesOfSlots?: readonly string[]) => Promise<void>;
@@ -75,6 +79,14 @@ export function PlanDataProvider({ children }: { children: ReactNode }) {
       },
       removeOverride: async ({ planId, slotId, week }) => {
         await repository.removeOverride(planId, slotId, week);
+        await reload();
+      },
+      saveOverrides: async (overrides) => {
+        await repository.saveOverrides(overrides);
+        await reload();
+      },
+      removeOverrides: async (keys) => {
+        await repository.removeOverrides(keys);
         await reload();
       },
       saveOneOff: async (oneOff) => {

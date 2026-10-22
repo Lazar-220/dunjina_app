@@ -95,3 +95,29 @@ export function buildOverride({ existing, planId, slotId, week, planned, form, d
   const hasContent = values || override.date || override.deleted || override.done;
   return hasContent ? override : null;
 }
+
+/**
+ * Sets or clears the moved date on an override. A date equal to the generated one is not a move and is dropped.
+ * Returns null when nothing is left to store.
+ */
+export function withMovedDate(
+  override: Override | null,
+  key: Pick<Override, 'planId' | 'slotId' | 'week'>,
+  date: string,
+  generatedDate: string | null,
+): Override | null {
+  const { date: _previous, ...rest } = override ?? { ...key };
+  const next: Override = date === generatedDate ? rest : { ...rest, date };
+  const hasContent = next.values || next.date || next.done || next.deleted;
+  return hasContent ? next : null;
+}
+
+/** The distance of a run or tempo workout, or null for other kinds. */
+export function distanceOf(values: WorkoutValues): number | null {
+  return values.kind === 'run' || values.kind === 'tempo' ? values.km : null;
+}
+
+/** The same workout with another distance; strength and interval workouts are returned unchanged. */
+export function withDistance(values: WorkoutValues, km: number): WorkoutValues {
+  return values.kind === 'run' || values.kind === 'tempo' ? { ...values, km } : values;
+}

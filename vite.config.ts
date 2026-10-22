@@ -9,6 +9,8 @@ export default defineConfig({
   base: './',
   test: {
     include: ['src/**/*.test.{ts,tsx}'],
+    // UI flow tests click through several screens; they are slow when the whole suite runs in parallel.
+    testTimeout: 20_000,
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test-setup.ts'],

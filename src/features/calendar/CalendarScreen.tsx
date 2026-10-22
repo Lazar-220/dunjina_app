@@ -19,18 +19,16 @@ import { todayIso } from '../../shared/today';
 import { Icon } from '../../shared/ui/Icon';
 import { WorkoutRow } from '../../shared/ui/WorkoutRow';
 import { PlanDataGate, type ReadyPlanData } from '../plan-data/PlanDataProvider';
-import { AddWorkoutSheet } from '../workout/AddWorkoutSheet';
-import type { CalendarItem, ItemRef } from '../workout/calendar-item';
+import type { CalendarItem } from '../workout/calendar-item';
 import { describeValues } from '../workout/describe';
-import { groupByDate, itemsBetween, titlesOnDate, unassignedInWeek } from '../workout/item-queries';
+import { groupByDate, itemsBetween, unassignedInWeek } from '../workout/item-queries';
+import { SheetsLayer, type OpenSheet } from '../workout/SheetsLayer';
 import { useWorkoutActions } from '../workout/useWorkoutActions';
-import { WorkoutSheetHost, type SheetMode } from '../workout/WorkoutSheetHost';
 import { CalendarEmpty } from './CalendarEmpty';
 import { MonthView } from './MonthView';
 import { WeekView } from './WeekView';
 
 type View = 'month' | 'week';
-type OpenSheet = { itemRef: ItemRef; mode: SheetMode } | { adding: IsoDate } | null;
 
 export function CalendarScreen() {
   return <PlanDataGate>{(data) => <Calendar data={data} />}</PlanDataGate>;
@@ -66,13 +64,13 @@ function Calendar({ data }: { data: ReadyPlanData }) {
 
   const items = useMemo(() => itemsBetween(source, range.from, range.to), [source, range]);
   const itemsByDate = useMemo(() => groupByDate(items), [items]);
+  const actions = useWorkoutActions(data);
   const unassigned = useMemo(() => {
     if (view !== 'week' || !activePlan) return [];
     const week = weekIndexOf(activePlan.startDate, weekStart);
     return week >= 1 ? unassignedInWeek(activePlan, week, data.index) : [];
   }, [view, activePlan, weekStart, data.index]);
 
-  const actions = useWorkoutActions(data);
 
   if (data.plans.length === 0 && data.oneOffs.length === 0) return <CalendarEmpty today={today} />;
 
@@ -88,9 +86,6 @@ function Calendar({ data }: { data: ReadyPlanData }) {
   };
 
   const stepWeek = (delta: number) => select(addDays(selected, 7 * delta));
-
-  const titlesOn = (date: IsoDate, excludeKey?: string) =>
-    titlesOnDate(itemsBetween(source, date, date), date, excludeKey);
 
   const selectedItems = itemsByDate.get(selected) ?? [];
   const selectedWeek = activePlan ? weekIndexOf(activePlan.startDate, selected) : 0;
@@ -171,6 +166,7 @@ function Calendar({ data }: { data: ReadyPlanData }) {
           unassigned={unassigned}
           onOpen={(item: CalendarItem) => setOpen({ itemRef: item.ref, mode: 'view' })}
           onMove={(item: CalendarItem) => setOpen({ itemRef: item.ref, mode: 'move' })}
+          onDrop={(item, date) => void actions.move(item, date)}
           onAdd={(date) => setOpen({ adding: date })}
         />
       )}
@@ -179,21 +175,7 @@ function Calendar({ data }: { data: ReadyPlanData }) {
         <Icon name="plus" size="l" />
       </button>
 
-      {open && 'itemRef' in open && (
-        <WorkoutSheetHost data={data} itemRef={open.itemRef} initialMode={open.mode} onClose={() => setOpen(null)} />
-      )}
-      {open && 'adding' in open && (
-        <AddWorkoutSheet
-          initialDate={open.adding}
-          titlesOn={titlesOn}
-          onCancel={() => setOpen(null)}
-          onAdd={async (type, date) => {
-            const oneOff = await actions.addOneOff(type, date);
-            select(date);
-            setOpen({ itemRef: { kind: 'oneOff', id: oneOff.id }, mode: 'view' });
-          }}
-        />
-      )}
+      <SheetsLayer data={data} open={open} onChange={setOpen} onAdded={(oneOff) => select(oneOff.date)} />
     </>
   );
 }
