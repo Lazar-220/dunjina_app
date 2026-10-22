@@ -36,7 +36,7 @@ The week that reaches max is shown at max; the next week resets to min. There is
 
 - If the initial current value is above max, treat it as already at max: week 1 keeps it, week 2 resets to min.
 - If it is below min, just apply the step.
-- Config validation warns on min > max, step <= 0, current outside [min, max], but still allows saving. (UI: min > max and step <= 0 are errors that block Next in the wizard; current outside the range only warns. The engine never throws on such configs.)
+- Config validation warns on min > max, step <= 0, current outside [min, max], but still allows saving. The engine never throws on such configs (with min > max the series settles on min). Only structurally unusable input is an error that blocks Next: empty names, an end date on or before the start date, an intervals slot without drafts.
 
 Tempo: warm-up and cool-down distances are fixed.
 
