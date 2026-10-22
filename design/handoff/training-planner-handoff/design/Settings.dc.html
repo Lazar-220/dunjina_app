@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.data{display:flex;flex-direction:column;gap:14px;padding:16px;border-radius:22px;background:var(--surface);border:1.5px solid var(--ink)}
+.file{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:13px;background:var(--surface2);font-size:13px}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.kv div{background:var(--surface2);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:1px}
+.kv b{font-size:18px}.kv small{font-size:12px;color:var(--ink2);font-weight:600}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="top">
+    <div class="grow col g4">
+      <span class="sm muted">Training Planner v1</span>
+      <h1 class="title">Settings</h1>
+    </div>
+  </div>
+  <div class="scroll" style="padding-top: 6px; gap: 14px">
+    <section class="data" aria-label="Your data">
+      <div class="col g4">
+        <h2 style="font-size: 19px; font-weight: 700">Your data</h2>
+        <p class="muted" style="text-wrap: pretty">Everything is stored only on this device. Export a backup to keep it safe or to move it between the browser and the Android app.</p>
+      </div>
+      <div class="kv" aria-label="Stored data">
+        <div><b>1</b><small>plan</small></div>
+        <div><b>26</b><small>workouts done</small></div>
+        <div><b>48 KB</b><small>backup size</small></div>
+      </div>
+      <div class="banner warn" role="status">
+        <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg>
+        <span><b>Last backup: 12 days ago.</b> Browsers can clear local storage without warning.</span>
+      </div>
+      <div class="col g8">
+        <button class="btn p blk" style="min-height: 56px; font-size: 16px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Export backup</button>
+        <div class="file"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7zM14 3v5h5"/></svg><span class="mono ell">training-planner-2026-10-22.json</span></div>
+        <button class="btn s blk" style="min-height: 56px; font-size: 16px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 9l5-5 5 5M5 20h14"/></svg>Import backup</button>
+        <span class="hint">Importing replaces what is on this device. You will see a summary and confirm first.</span>
+      </div>
+      <div class="r rb sep" style="height: auto; padding-top: 12px; background: none; border-top: 1px solid var(--line)">
+        <span class="sm">Browser storage</span>
+        <span class="st done"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Persistent</span>
+      </div>
+    </section>
+    <section class="card col g12">
+      <h2 style="font-size: 17px; font-weight: 700">Appearance</h2>
+      <div class="seg" role="radiogroup" aria-label="Theme">
+        <button role="radio" aria-checked="false">Light</button>
+        <button role="radio" aria-checked="false">Dark</button>
+        <button class="on" role="radio" aria-checked="true">System</button>
+      </div>
+    </section>
+    <section class="card col g8">
+      <h2 style="font-size: 17px; font-weight: 700">About</h2>
+      <div class="r rb"><span class="muted">Units</span><span class="mono sm">km · kg · km/h · s</span></div>
+      <div class="r rb"><span class="muted">Backup format</span><span class="mono sm">v1</span></div>
+      <div class="r rb"><span class="muted">Weeks start on</span><span class="mono sm">Monday</span></div>
+    </section>
+  </div>
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab" href="Main.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>Calendar</a>
+    <a class="tab" href="Weeks.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>Weeks</a>
+    <a class="tab" href="Plans.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 5-9 5-9-5 9-5z"/><path d="M3 14l9 5 9-5"/></svg></span>Plans</a>
+    <a class="tab on" href="Settings.dc.html" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg></span>Settings</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

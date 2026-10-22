@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plans</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.pl{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:var(--surface);border:1.5px solid var(--line)}
+.pl.act{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.pl.off{background:transparent;border-style:dashed}
+.live{width:8px;height:8px;border-radius:50%;background:var(--ok-ink);flex:none}
+.mix{display:flex;gap:5px;align-items:center}
+.mix i{display:block;width:11px;height:11px}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="top">
+    <div class="grow col g4">
+      <span class="sm muted">3 plans</span>
+      <h1 class="title">Plans</h1>
+    </div>
+    <a class="btn p" href="W1-Basics.dc.html" style="min-height: 46px"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>New plan</a>
+  </div>
+  <div class="scroll" style="padding-top: 6px">
+    <section class="pl act">
+      <div class="r rb">
+        <h2 style="font-size: 19px; font-weight: 700">Autumn base</h2>
+        <span class="st done"><i class="live"></i>Active</span>
+      </div>
+      <div class="col g4">
+        <span class="sm muted">Open-ended · since Mon 21 Sep 2026</span>
+        <span class="sm muted">Now in week 5 · 7 workouts a week</span>
+      </div>
+      <div class="mix" aria-label="Weekly mix: 2 strength, 5 running">
+        <i class="t-lo" style="background: var(--t-lo); border-radius: 3px"></i>
+        <i class="t-up" style="background: var(--t-up); border-radius: 3px"></i>
+        <i class="t-ez" style="background: var(--t-ez); border-radius: 50%"></i>
+        <i class="t-ez" style="background: var(--t-ez); border-radius: 50%"></i>
+        <i class="t-lr" style="background: var(--t-lr); border-radius: 50%"></i>
+        <i class="t-tp" style="background: var(--t-tp); border-radius: 50%"></i>
+        <i class="t-iv" style="background: var(--t-iv); border-radius: 50%"></i>
+        <span class="xs muted" style="margin-left: 4px">2 strength · 5 running</span>
+      </div>
+      <div class="r g8">
+        <a class="btn s grow" href="W2-Structure.dc.html" style="min-height: 46px"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/></svg>Edit plan</a>
+        <a class="ib o" href="Plan-End.dc.html" aria-label="More actions for Autumn base" style="height: 46px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></a>
+      </div>
+    </section>
+    <section class="pl">
+      <div class="r rb">
+        <h2 style="font-size: 19px; font-weight: 700">Winter strength</h2>
+        <span class="st">Upcoming</span>
+      </div>
+      <div class="col g4">
+        <span class="sm muted">Mon 4 Jan – Sun 28 Mar 2027 · 12 weeks</span>
+        <span class="sm muted">4 workouts a week</span>
+      </div>
+      <div class="r g8">
+        <a class="btn s grow" href="W2-Structure.dc.html" style="min-height: 46px"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/></svg>Edit plan</a>
+        <button class="ib o" aria-label="More actions for Winter strength" style="height: 46px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+      </div>
+    </section>
+    <section class="pl off">
+      <div class="r rb">
+        <h2 style="font-size: 19px; font-weight: 700">Spring 10K</h2>
+        <span class="st">Ended</span>
+      </div>
+      <div class="col g4">
+        <span class="sm muted">Mon 16 Mar – Sun 14 Jun 2026 · 13 weeks</span>
+        <span class="sm muted">52 workouts completed</span>
+      </div>
+      <div class="r g8">
+        <button class="btn s grow" style="min-height: 46px"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Duplicate as new plan</button>
+        <button class="ib o" aria-label="More actions for Spring 10K" style="height: 46px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+      </div>
+    </section>
+  </div>
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab" href="Main.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>Calendar</a>
+    <a class="tab" href="Weeks.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>Weeks</a>
+    <a class="tab on" href="Plans.dc.html" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 5-9 5-9-5 9-5z"/><path d="M3 14l9 5 9-5"/></svg></span>Plans</a>
+    <a class="tab" href="Settings.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg></span>Settings</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

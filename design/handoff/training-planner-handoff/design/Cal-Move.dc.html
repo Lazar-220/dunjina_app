@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Move workout</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.wd{min-height:68px;border-radius:14px;border:1.5px solid var(--line2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:600;color:var(--ink2);background:var(--surface)}
+.wd b{font-size:17px;color:var(--ink)}
+.wd.on{background:var(--btn);border-color:var(--btn);color:var(--on-btn)}.wd.on b{color:var(--on-btn)}
+.wd.cur{border-style:dashed}.wd.past{opacity:.6}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div style="position: absolute; inset: 0">
+    <dc-import name="Cal-Week" mode="rest" theme="{{theme}}" hint-size="390px,844px"></dc-import>
+  </div>
+  <div class="scrim"></div>
+  <div class="sheet" role="dialog" aria-label="Move Easy run">
+    <div class="grab"></div>
+    <div class="r">
+      <span class="badge t-ez">EZ</span>
+      <div class="grow col"><h2 style="font-size: 20px; font-weight: 700">Move Easy run</h2><span class="sm muted">4 km · now Thu 22 Oct</span></div>
+      <button class="ib" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="sec">This week</div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+      <button class="wd past" aria-label="Mon 19 Oct">Mon<b>19</b></button>
+      <button class="wd past" aria-label="Tue 20 Oct">Tue<b>20</b></button>
+      <button class="wd past" aria-label="Wed 21 Oct">Wed<b>21</b></button>
+      <button class="wd cur" aria-label="Thu 22 Oct, current day">Thu<b>22</b></button>
+      <button class="wd on" aria-pressed="true" aria-label="Fri 23 Oct">Fri<b>23</b></button>
+      <button class="wd" aria-label="Sat 24 Oct">Sat<b>24</b></button>
+      <button class="wd" aria-label="Sun 25 Oct">Sun<b>25</b></button>
+    </div>
+    <button class="inp" style="justify-content: space-between; min-height: 52px">
+      <span class="r g10"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Another week or date…</span>
+      <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="banner info" style="align-items: center">
+      <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+      <span>Only the day changes. Values and progression stay the same. Fri already has Tempo.</span>
+    </div>
+    <div class="col g8">
+      <button class="btn p blk">Move to Fri 23 Oct</button>
+      <button class="btn blk">Cancel</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Weekly structure</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.wkm{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;width:100%}
+.wkm span{min-height:64px;border-radius:12px;border:1.5px solid var(--line2);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:7px;gap:5px;font-size:12px;font-weight:600;color:var(--ink2)}
+.wkm span.free{border-style:dashed;background:transparent}
+.wkm .dot{width:9px;height:9px}
+.wd2{min-height:44px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line2);display:inline-flex;align-items:center;gap:6px;font-weight:650;font-size:14px;background:var(--surface);min-width:84px;justify-content:space-between}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="wz">
+    <a class="ib" href="W1-Basics.dc.html" aria-label="Back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <span class="b grow">New plan</span>
+    <span class="sm muted" style="padding-right: 8px">Step 2 of 4</span>
+  </div>
+  <div class="bars"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+  <div class="scroll" style="padding-top: 18px; gap: 14px">
+    <div class="col g4">
+      <h1 class="title">Weekly structure</h1>
+      <p class="muted" style="text-wrap: pretty">The workouts you do every week. A default weekday is optional; you can move any workout later.</p>
+    </div>
+    <div class="wkm" role="img" aria-label="Week preview: Mon lower, Tue intervals, Wed easy, Thu upper and easy, Fri tempo, Sat free, Sun long run">
+      <span>M<i class="dot sq t-lo"></i></span>
+      <span>T<i class="dot t-iv"></i></span>
+      <span>W<i class="dot t-ez"></i></span>
+      <span>T<i class="dot sq t-up"></i><i class="dot t-ez"></i></span>
+      <span>F<i class="dot t-tp"></i></span>
+      <span class="free">S</span>
+      <span>S<i class="dot t-lr"></i></span>
+    </div>
+    <div class="sec">Add a slot</div>
+    <div class="r g8" style="overflow: auto; margin: 0 -16px; padding: 2px 16px">
+      <button class="chip t-lo"><span class="dot sq"></span>Lower</button>
+      <button class="chip t-up"><span class="dot sq"></span>Upper</button>
+      <button class="chip t-ez"><span class="dot"></span>Easy run</button>
+      <button class="chip t-lr"><span class="dot"></span>Long run</button>
+      <button class="chip t-tp"><span class="dot"></span>Tempo</button>
+      <button class="chip t-iv"><span class="dot"></span>Intervals</button>
+    </div>
+    <div class="r rb"><div class="sec" style="padding: 0">7 workouts per week</div><span class="sm muted">2 strength · 5 running</span></div>
+    <div class="col g8">
+      <div class="wk t-lo"><span class="badge sq sm">LO</span><span class="grow nm">Lower body</span><button class="wd2">Mon<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button><button class="ib" aria-label="Remove Lower body"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="wk t-iv"><span class="badge sm">IV</span><span class="grow nm">Intervals</span><button class="wd2">Tue<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button><button class="ib" aria-label="Remove Intervals"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="wk t-ez"><span class="badge sm">EZ</span><span class="grow col"><span class="nm">Easy run</span><span class="sm muted">Slot A</span></span><button class="wd2">Wed<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button><button class="ib" aria-label="Remove Easy run A"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="wk t-up"><span class="badge sq sm">UP</span><span class="grow nm">Upper body</span><button class="wd2">Thu<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button><button class="ib" aria-label="Remove Upper body"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="wk t-ez"><span class="badge sm">EZ</span><span class="grow col"><span class="nm">Easy run</span><span class="sm muted">Slot B</span></span><button class="wd2">Thu<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button><button class="ib" aria-label="Remove Easy run B"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="wk t-tp"><span class="badge sm">TP</span><span class="grow nm">Tempo</span><button class="wd2">Fri<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button><button class="ib" aria-label="Remove Tempo"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="wk t-lr"><span class="badge sm">LR</span><span class="grow nm">Long run</span><button class="wd2">Sun<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button><button class="ib" aria-label="Remove Long run"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    </div>
+  </div>
+  <div class="foot">
+    <a class="btn s" href="W1-Basics.dc.html" style="min-width: 96px">Back</a>
+    <a class="btn p" href="W3-Strength.dc.html">Next: configure slots</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

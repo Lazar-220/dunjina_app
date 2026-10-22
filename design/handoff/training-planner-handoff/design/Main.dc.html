@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Calendar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="top">
+    <div class="grow col g4">
+      <span class="sm muted">Autumn base · Week 5</span>
+      <h1 class="title">October 2026</h1>
+    </div>
+    <button class="ib o" aria-label="Previous month"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="ib o" aria-label="Next month"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+  <div style="padding: 0 16px 8px">
+    <div class="seg">
+      <button class="on" aria-pressed="true">Month</button>
+      <a href="Cal-Week.dc.html">Week</a>
+    </div>
+  </div>
+  <div style="padding: 0 10px; flex: none">
+    <div class="mgrid">
+      <div class="dow">M</div><div class="dow">T</div><div class="dow">W</div><div class="dow">T</div><div class="dow">F</div><div class="dow">S</div><div class="dow">S</div>
+    </div>
+    <div class="mgrid">
+      <sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+        <button class="day {{c.cls}}" onClick="{{c.pick}}" aria-label="{{c.label}}">
+          <span class="n">{{c.n}}</span>
+          <span class="dots">
+            <sc-for list="{{c.dots}}" as="d"><span class="dot {{d.cls}}"></span></sc-for>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+  <div class="r g16 xs muted" style="padding: 8px 20px 4px; flex: none">
+    <span class="r g6"><span class="dot t-lr"></span>Done</span>
+    <span class="r g6"><span class="dot t-lr ring"></span>Draft</span>
+    <span class="r g6"><span class="dot sq t-lo"></span>Strength</span>
+    <span class="r g6"><span class="dot t-ez"></span>Running</span>
+  </div>
+  <div class="sep" style="margin: 6px 16px 0"></div>
+  <div class="scroll" style="padding-top: 12px">
+    <div class="r rb">
+      <div class="col g4">
+        <h2 style="font-size: 18px; font-weight: 700">{{selTitle}}</h2>
+        <span class="sm muted">{{selSub}}</span>
+      </div>
+    </div>
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="2">
+      <a class="wk t-{{it.k}} {{it.cls}}" href="Sheet-View.dc.html">
+        <span class="badge {{it.bcls}}">{{it.code}}</span>
+        <span class="grow col"><span class="nm">{{it.name}}</span><span class="ds ell">{{it.sub}}</span></span>
+        <sc-if value="{{it.done}}" hint-placeholder-val="{{false}}"><span class="st done"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Done</span></sc-if>
+        <sc-if value="{{it.draft}}" hint-placeholder-val="{{true}}"><span class="st draft">Draft</span></sc-if>
+      </a>
+    </sc-for>
+    <sc-if value="{{rest}}" hint-placeholder-val="{{false}}">
+      <a class="empty-slot" href="Cal-Add.dc.html" style="min-height: 64px">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Rest day · tap to add a workout
+      </a>
+    </sc-if>
+  </div>
+  <a class="fab" href="Cal-Add.dc.html" aria-label="Add workout"><svg class="ic l" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></a>
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab on" href="Main.dc.html" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>Calendar</a>
+    <a class="tab" href="Weeks.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>Weeks</a>
+    <a class="tab" href="Plans.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 5-9 5-9-5 9-5z"/><path d="M3 14l9 5 9-5"/></svg></span>Plans</a>
+    <a class="tab" href="Settings.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg></span>Settings</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sel: 24 }; }
+  renderVals() {
+    const N = 9;
+    // progression rules from the spec (final value of previous week -> this week)
+    const run = (cur, min, max, step, o = {}) => { const a = []; let p; for (let w = 1; w <= N; w++) { let v = w === 1 ? cur : (p >= max ? min : Math.min(p + step, max)); if (o[w] != null) v = o[w]; a.push(v); p = v; } return a; };
+    const str = (e, o = {}) => { const a = []; let p; for (let w = 1; w <= N; w++) { let r, k; if (w === 1) { r = e.cur; k = e.kg; } else if (p[0] >= e.max) { r = e.min; k = p[1] + e.step; } else { r = Math.min(p[0] + e.x, e.max); k = p[1]; } if (o[w]) { r = o[w][0]; k = o[w][1]; } a.push([r, k]); p = [r, k]; } return a; };
+    const iv = (s, Y, D, o = {}) => { const a = []; let p; for (let w = 1; w <= N; w++) { let v = w === 1 ? s : ((w - 1) % D === 0 ? p + Y : p); if (o[w] != null) v = o[w]; a.push(v); p = v; } return a; };
+    const f = (v) => String(+v.toFixed(1));
+    const LO = [
+      { n: 'Back squat', a: str({ cur: 6, min: 6, max: 10, x: 2, kg: 60, step: 2.5 }, { 4: [6, 60] }) },
+      { n: 'Romanian deadlift', a: str({ cur: 8, min: 8, max: 12, x: 2, kg: 50, step: 5 }) },
+      { n: 'Walking lunge', a: str({ cur: 8, min: 8, max: 12, x: 2, kg: 14, step: 2 }) }];
+    const UP = [
+      { n: 'Bench press', a: str({ cur: 6, min: 6, max: 10, x: 2, kg: 45, step: 2.5 }) },
+      { n: 'Barbell row', a: str({ cur: 8, min: 8, max: 12, x: 2, kg: 40, step: 2.5 }) },
+      { n: 'Overhead press', a: str({ cur: 8, min: 6, max: 10, x: 2, kg: 30, step: 2.5 }) }];
+    const EA = run(5, 4, 9, 1), EB = run(4, 3, 6, 1), LR = run(10, 8, 16, 1, { 6: 13 }), TP = run(3, 2, 6, 1);
+    const SP = iv(12, 0.5, 3, { 5: 12 });
+    const DR = [{ n: 8, d: 400 }, { n: 5, d: 800 }, { n: 4, d: 1000 }];
+    const strSub = (ex, w) => { const e = ex[0].a[w - 1]; return ex[0].n + ' 3×' + e[0] + ' @ ' + f(e[1]) + ' kg · +' + (ex.length - 1) + ' more'; };
+    const mk = (key, w) => {
+      if (key === 'lo') return { k: 'lo', code: 'LO', sq: true, name: 'Lower body', sub: strSub(LO, w) };
+      if (key === 'up') return { k: 'up', code: 'UP', sq: true, name: 'Upper body', sub: strSub(UP, w) };
+      if (key === 'ea') return { k: 'ez', code: 'EZ', sq: false, name: 'Easy run', sub: EA[w - 1] + ' km' };
+      if (key === 'eb') return { k: 'ez', code: 'EZ', sq: false, name: 'Easy run', sub: EB[w - 1] + ' km' };
+      if (key === 'lr') return { k: 'lr', code: 'LR', sq: false, name: 'Long run', sub: LR[w - 1] + ' km' };
+      if (key === 'tp') return { k: 'tp', code: 'TP', sq: false, name: 'Tempo', sub: TP[w - 1] + ' km tempo · ' + f(2 + TP[w - 1] + 1.5) + ' km total' };
+      const d = DR[(w - 1) % 3]; const n = w === 5 ? 4 : d.n;
+      return { k: 'iv', code: 'IV', sq: false, name: 'Intervals', sub: n + ' × ' + d.d + ' m · ' + SP[w - 1].toFixed(1) + ' km/h' };
+    };
+    const byDow = [['lo'], ['iv'], ['ea'], ['up', 'eb'], ['tp'], [], ['lr']];
+    const WD = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], MN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const TODAY = 24, sel = this.state.sel;
+    const cells = [];
+    for (let i = 0; i < 35; i++) {
+      const dt = new Date(2026, 8, 28 + i), w = 2 + Math.floor(i / 7), dow = i % 7;
+      const its = byDow[dow].map((k) => mk(k, w));
+      cells.push({
+        n: dt.getDate(),
+        label: WD[dow] + ' ' + dt.getDate() + ' ' + MN[dt.getMonth()] + ', ' + its.length + ' workouts',
+        cls: (dt.getMonth() !== 9 ? 'out ' : '') + (i === TODAY ? 'today ' : '') + (i === sel ? 'sel' : ''),
+        dots: its.map((x) => ({ cls: 't-' + x.k + (x.sq ? ' sq' : '') + (i >= TODAY ? ' ring' : '') })),
+        pick: () => this.setState({ sel: i })
+      });
+    }
+    const dt = new Date(2026, 8, 28 + sel), w = 2 + Math.floor(sel / 7), dow = sel % 7;
+    const items = byDow[dow].map((k) => { const x = mk(k, w); const done = sel < TODAY; return { k: x.k, code: x.code, name: x.name, sub: x.sub, bcls: (x.sq ? 'sq ' : '') + (done ? '' : 'draft'), cls: done ? 'done' : 'draft', done, draft: !done }; });
+    const cnt = items.length;
+    return {
+      theme: this.props.theme ?? 'light', cells, items,
+      selTitle: WD[dow] + ' ' + dt.getDate() + ' ' + MN[dt.getMonth()],
+      selSub: (sel === TODAY ? 'Today · ' : 'Week ' + w + ' · ') + (cnt ? cnt + (cnt === 1 ? ' workout' : ' workouts') : 'no workouts'),
+      rest: cnt === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

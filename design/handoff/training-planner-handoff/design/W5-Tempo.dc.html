@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Configure tempo slot</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.bars8{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;align-items:end;height:150px}
+.bcol{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+.bstack{width:100%;display:flex;flex-direction:column-reverse;border-radius:6px;overflow:hidden;gap:2px}
+.bstack i{display:block;width:100%}
+.bstack .fx{background:var(--line2)}.bstack .tp{background:var(--c)}
+.lg{width:12px;height:12px;border-radius:3px;flex:none}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="wz">
+    <a class="ib" href="W4-EasyRun.dc.html" aria-label="Back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <span class="b grow">New plan</span>
+    <span class="sm muted" style="padding-right: 8px">Step 3 of 4</span>
+  </div>
+  <div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+  <div class="slots" style="padding-top: 14px">
+    <button class="sl t-lo"><span class="mini sq">LO</span>Lower<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl t-up"><span class="mini sq">UP</span>Upper<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl t-ez"><span class="mini">EZ</span>Easy A<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl t-ez"><span class="mini">EZ</span>Easy B<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl t-lr"><span class="mini">LR</span>Long<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl on t-tp"><span class="mini">TP</span>Tempo</button>
+    <button class="sl t-iv"><span class="mini">IV</span>Intervals</button>
+  </div>
+  <div class="scroll" style="padding-top: 10px">
+    <div class="r rb"><h1 style="font-size: 22px; font-weight: 700">Tempo</h1><span class="sm muted">Slot 6 of 7 · Fri</span></div>
+    <div class="card col g12">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div class="field"><span class="lbl">Warm-up (fixed)</span><div class="step"><button aria-label="Shorter warm-up"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">2.0<span class="u">km</span></span><button aria-label="Longer warm-up"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Cool-down (fixed)</span><div class="step"><button aria-label="Shorter cool-down"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">1.5<span class="u">km</span></span><button aria-label="Longer cool-down"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Current tempo</span><div class="step"><button aria-label="Less"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">3.0<span class="u">km</span></span><button aria-label="More"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Km step</span><div class="step"><button aria-label="Smaller step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">+1.0<span class="u">km</span></span><button aria-label="Larger step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Min tempo</span><div class="step"><button aria-label="Lower min"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">2.0<span class="u">km</span></span><button aria-label="Raise min"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Max tempo</span><div class="step"><button aria-label="Lower max"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">6.0<span class="u">km</span></span><button aria-label="Raise max"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="tnote">Note (optional)</label>
+        <input id="tnote" class="inp" value="Comfortably hard, 10.5 km/h" autocomplete="off">
+      </div>
+    </div>
+    <div class="card col g10 t-tp">
+      <div class="r rb"><span class="b">Projection · total km per session</span></div>
+      <div class="bars8" role="img" aria-label="{{label}}">
+        <sc-for list="{{cols}}" as="c" hint-placeholder-count="8">
+          <div class="bcol">
+            <span class="mono xs">{{c.total}}</span>
+            <div class="bstack">
+              <i class="fx" style="height: {{c.wu}}px"></i>
+              <i class="tp" style="height: {{c.tp}}px"></i>
+              <i class="fx" style="height: {{c.cd}}px"></i>
+            </div>
+            <span class="xs muted b">{{c.w}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div class="r g16 xs muted">
+        <span class="r g6"><i class="lg" style="background: var(--t-tp)"></i>Tempo (progresses)</span>
+        <span class="r g6"><i class="lg" style="background: var(--line2)"></i>Warm-up + cool-down</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <a class="btn s" href="W4-EasyRun.dc.html" style="min-width: 96px">Back</a>
+    <a class="btn p" href="W6-Intervals.dc.html">Next slot: Intervals</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const cur = 3, min = 2, max = 6, step = 1, wu = 2, cd = 1.5, N = 8, PX = 9;
+    const v = []; let p;
+    for (let w = 1; w <= N; w++) { const x = w === 1 ? cur : (p >= max ? min : Math.min(p + step, max)); v.push(x); p = x; }
+    const f = (n) => String(+n.toFixed(1));
+    return {
+      theme: this.props.theme ?? 'light',
+      label: 'Total km per tempo session, weeks 1 to 8: ' + v.map((t) => f(wu + t + cd)).join(', '),
+      cols: v.map((t, i) => ({ w: 'W' + (i + 1), total: f(wu + t + cd), wu: Math.round(wu * PX), tp: Math.round(t * PX), cd: Math.round(cd * PX) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

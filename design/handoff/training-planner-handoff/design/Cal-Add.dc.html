@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add workout</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div style="position: absolute; inset: 0">
+    <dc-import name="Main" theme="{{theme}}" hint-size="390px,844px"></dc-import>
+  </div>
+  <div class="scrim"></div>
+  <div class="sheet" role="dialog" aria-label="Add workout">
+    <div class="grab"></div>
+    <div class="r">
+      <h2 class="grow" style="font-size: 22px; font-weight: 700">Add workout</h2>
+      <button class="ib" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <button class="inp" style="justify-content: space-between; min-height: 52px">
+      <span class="r g10"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Sat 24 Oct <span class="muted sm">· rest day</span></span>
+      <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
+    </button>
+    <div class="sec">Type</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <a class="wk t-lo" href="Sheet-View.dc.html" style="min-height: 68px"><span class="badge sq sm">LO</span><span class="grow col"><span class="nm">Lower body</span><span class="ds">Strength</span></span></a>
+      <a class="wk t-up" href="Sheet-View.dc.html" style="min-height: 68px"><span class="badge sq sm">UP</span><span class="grow col"><span class="nm">Upper body</span><span class="ds">Strength</span></span></a>
+      <a class="wk t-ez" href="Sheet-View.dc.html" style="min-height: 68px"><span class="badge sm">EZ</span><span class="grow col"><span class="nm">Easy run</span><span class="ds">Running</span></span></a>
+      <a class="wk t-lr" href="Sheet-View.dc.html" style="min-height: 68px"><span class="badge sm">LR</span><span class="grow col"><span class="nm">Long run</span><span class="ds">Running</span></span></a>
+      <a class="wk t-tp" href="Sheet-View.dc.html" style="min-height: 68px"><span class="badge sm">TP</span><span class="grow col"><span class="nm">Tempo</span><span class="ds">Running</span></span></a>
+      <a class="wk t-iv" href="Sheet-View.dc.html" style="min-height: 68px"><span class="badge sm">IV</span><span class="grow col"><span class="nm">Intervals</span><span class="ds">Running</span></span></a>
+    </div>
+    <div class="banner info">
+      <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+      <span>One-off workouts sit outside the plan and never change its progression. To adjust a plan slot, edit its draft in Weeks.</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

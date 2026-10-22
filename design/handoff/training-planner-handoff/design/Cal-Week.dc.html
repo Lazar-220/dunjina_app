@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Calendar week</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="top">
+    <div class="grow col g4">
+      <span class="sm muted">Autumn base</span>
+      <h1 class="title">Week 5</h1>
+    </div>
+    <button class="ib o" aria-label="Previous week"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="ib o" aria-label="Next week"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+  <div style="padding: 0 16px 8px">
+    <div class="seg">
+      <a href="Main.dc.html">Month</a>
+      <button class="on" aria-pressed="true">Week</button>
+    </div>
+  </div>
+  <sc-if value="{{drag}}" hint-placeholder-val="{{true}}">
+  <div style="padding: 0 16px 6px; flex: none">
+    <div class="banner info" role="status" style="align-items: center; padding: 9px 12px">
+      <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" style="stroke-width: 3.2"/></svg>
+      <span class="grow"><b>Moving Easy run</b> · release on Fri 23 Oct</span>
+    </div>
+  </div>
+  </sc-if>
+  <div class="scroll" style="padding-top: 0; gap: 0">
+    <div style="position: relative">
+      <div class="dayrow">
+        <div class="dlab">Mon<b>19</b></div>
+        <div class="stack">
+          <div class="wk t-lo done">
+            <span class="badge sq">LO</span>
+            <span class="grow col"><span class="nm r g6">Lower body <svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="ds ell">Squat 3×8 @ 60 kg · +2</span></span>
+            <button class="ib" aria-label="More actions for Lower body"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="dayrow">
+        <div class="dlab">Tue<b>20</b></div>
+        <div class="stack">
+          <div class="wk t-iv done">
+            <span class="badge">IV</span>
+            <span class="grow col"><span class="nm r g6">Intervals <svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="mod">edited</span></span><span class="ds ell">4 × 800 m · 12.0 km/h</span></span>
+            <button class="ib" aria-label="More actions for Intervals"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="dayrow">
+        <div class="dlab">Wed<b>21</b></div>
+        <div class="stack">
+          <div class="wk t-ez done">
+            <span class="badge">EZ</span>
+            <span class="grow col"><span class="nm r g6">Easy run <svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="ds ell">9 km</span></span>
+            <button class="ib" aria-label="More actions for Easy run"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="dayrow today">
+        <div class="dlab">Thu<b>22</b></div>
+        <div class="stack">
+          <div class="wk t-up draft">
+            <span class="badge sq draft">UP</span>
+            <span class="grow col"><span class="nm">Upper body</span><span class="ds ell">Bench 3×8 @ 47.5 kg · +2</span></span>
+            <button class="ib" aria-label="More actions for Upper body"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+          </div>
+          <div class="wk t-ez {{ezCls}}">
+            <span class="badge draft">EZ</span>
+            <span class="grow col"><span class="nm">Easy run</span><span class="ds ell">4 km</span></span>
+            <sc-if value="{{still}}" hint-placeholder-val="{{false}}"><button class="ib" aria-label="More actions for Easy run"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button></sc-if>
+          </div>
+        </div>
+      </div>
+      <div class="dayrow">
+        <div class="dlab">Fri<b>23</b></div>
+        <div class="stack">
+          <sc-if value="{{drag}}" hint-placeholder-val="{{true}}"><div class="drop empty-slot" style="border: 0; justify-content: center; font-weight: 600; color: var(--ink)">Drop here · Fri 23 Oct</div></sc-if>
+          <div class="wk t-tp draft">
+            <span class="badge draft">TP</span>
+            <span class="grow col"><span class="nm">Tempo</span><span class="ds ell">2 km tempo · 5.5 km total</span></span>
+            <button class="ib" aria-label="More actions for Tempo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="dayrow">
+        <div class="dlab">Sat<b>24</b></div>
+        <div class="stack">
+          <a class="empty-slot" href="Cal-Add.dc.html"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Rest · tap to add</a>
+        </div>
+      </div>
+      <div class="dayrow">
+        <div class="dlab">Sun<b>25</b></div>
+        <div class="stack">
+          <div class="wk t-lr draft">
+            <span class="badge draft">LR</span>
+            <span class="grow col"><span class="nm">Long run</span><span class="ds ell">14 km</span></span>
+            <button class="ib" aria-label="More actions for Long run"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" style="stroke-width: 3.2"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <sc-if value="{{drag}}" hint-placeholder-val="{{true}}">
+      <div class="wk t-ez lift" style="position: absolute; left: 54px; right: 0; top: 372px" aria-label="Easy run being dragged">
+        <span class="badge">EZ</span>
+        <span class="grow col"><span class="nm">Easy run</span><span class="ds ell">4 km · Thu → Fri</span></span>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" style="stroke-width: 3.2"/></svg>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+  <a class="fab" href="Cal-Add.dc.html" aria-label="Add workout"><svg class="ic l" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></a>
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab on" href="Main.dc.html" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>Calendar</a>
+    <a class="tab" href="Weeks.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>Weeks</a>
+    <a class="tab" href="Plans.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 5-9 5-9-5 9-5z"/><path d="M3 14l9 5 9-5"/></svg></span>Plans</a>
+    <a class="tab" href="Settings.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg></span>Settings</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"mode":{"editor":"enum","options":["drag","rest"],"default":"drag"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const drag = (this.props.mode ?? 'drag') === 'drag';
+    return { theme: this.props.theme ?? 'light', drag, still: !drag, ezCls: drag ? 'ghost' : 'draft' };
+  }
+}
+</script>
+</body>
+</html>

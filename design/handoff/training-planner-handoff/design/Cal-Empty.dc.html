@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Calendar empty</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.wkm{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;width:100%}
+.wkm span{height:56px;border-radius:12px;border:1.5px dashed var(--line2);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:7px;gap:3px;font-size:12px;font-weight:600;color:var(--ink2)}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="top">
+    <div class="grow col g4">
+      <span class="sm muted">No active plan</span>
+      <h1 class="title">October 2026</h1>
+    </div>
+    <button class="ib o" aria-label="Previous month"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="ib o" aria-label="Next month"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+  <div style="padding: 0 10px; flex: none; opacity: .55">
+    <div class="mgrid">
+      <div class="dow">M</div><div class="dow">T</div><div class="dow">W</div><div class="dow">T</div><div class="dow">F</div><div class="dow">S</div><div class="dow">S</div>
+    </div>
+    <div class="mgrid">
+      <sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+        <div class="day {{c.cls}}"><span class="n">{{c.n}}</span></div>
+      </sc-for>
+    </div>
+  </div>
+  <div class="scroll" style="justify-content: center; padding-bottom: 96px">
+    <div class="card col g16" style="align-items: center; padding: 22px 18px; text-align: center">
+      <div class="wkm" aria-hidden="true">
+        <span>M<i class="dot sq t-lo"></i></span><span>T<i class="dot t-iv"></i></span><span>W<i class="dot t-ez"></i></span><span>T<i class="dot sq t-up"></i></span><span>F<i class="dot t-tp"></i></span><span>S<i class="dot" style="background: transparent"></i></span><span>S<i class="dot t-lr"></i></span>
+      </div>
+      <div class="col g6">
+        <h2 style="font-size: 21px; font-weight: 700">No active plan</h2>
+        <p class="muted" style="text-wrap: pretty">Define your weekly structure once. Training Planner then generates progressive drafts for every week, with no limit ahead.</p>
+      </div>
+      <a class="btn p blk" href="W1-Basics.dc.html"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Create plan</a>
+      <a class="btn s blk" href="Settings.dc.html"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5M7 9l5-5 5 5M5 20h14"/></svg>Import a backup</a>
+    </div>
+  </div>
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab on" href="Cal-Empty.dc.html" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>Calendar</a>
+    <a class="tab" href="Weeks.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>Weeks</a>
+    <a class="tab" href="Plans.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 5-9 5-9-5 9-5z"/><path d="M3 14l9 5 9-5"/></svg></span>Plans</a>
+    <a class="tab" href="Settings.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg></span>Settings</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const cells = [];
+    for (let i = 0; i < 35; i++) {
+      const dt = new Date(2026, 8, 28 + i);
+      cells.push({ n: dt.getDate(), cls: (dt.getMonth() !== 9 ? 'out ' : '') + (i === 24 ? 'today' : '') });
+    }
+    return { theme: this.props.theme ?? 'light', cells };
+  }
+}
+</script>
+</body>
+</html>

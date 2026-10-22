@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Configure easy run slot</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="wz">
+    <a class="ib" href="W3-Strength.dc.html" aria-label="Back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <span class="b grow">New plan</span>
+    <span class="sm muted" style="padding-right: 8px">Step 3 of 4</span>
+  </div>
+  <div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+  <div class="slots" style="padding-top: 14px">
+    <button class="sl t-lo"><span class="mini sq">LO</span>Lower<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl t-up"><span class="mini sq">UP</span>Upper<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl on t-ez"><span class="mini">EZ</span>Easy A<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--warn-ink)"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg></button>
+    <button class="sl t-ez"><span class="mini">EZ</span>Easy B</button>
+    <button class="sl t-lr"><span class="mini">LR</span>Long</button>
+    <button class="sl t-tp"><span class="mini">TP</span>Tempo</button>
+    <button class="sl t-iv"><span class="mini">IV</span>Intervals</button>
+  </div>
+  <div class="scroll" style="padding-top: 10px">
+    <div class="r rb"><h1 style="font-size: 22px; font-weight: 700">Easy run A</h1><span class="sm muted">Slot 3 of 7 · Wed</span></div>
+    <div class="card col g12">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div class="field"><span class="lbl">Current km</span><div class="step warn"><button aria-label="Less"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">11.0<span class="u">km</span></span><button aria-label="More"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Km step</span><div class="step"><button aria-label="Smaller step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">+1.0<span class="u">km</span></span><button aria-label="Larger step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Min km</span><div class="step"><button aria-label="Lower min"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">4.0<span class="u">km</span></span><button aria-label="Raise min"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Max km</span><div class="step"><button aria-label="Lower max"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">9.0<span class="u">km</span></span><button aria-label="Raise max"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+      </div>
+      <div class="banner warn" role="status">
+        <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg>
+        <span><b>Current is above max.</b> Week 1 runs 11 km, then week 2 resets to the min (4 km). You can continue, or lower the current value.</span>
+      </div>
+      <div class="field">
+        <label class="lbl" for="enote">Note (optional)</label>
+        <input id="enote" class="inp" value="Conversational pace" autocomplete="off">
+      </div>
+    </div>
+    <div class="card col g10 t-ez">
+      <div class="r rb"><span class="b">Projection · km</span><span class="xs muted r g6"><i class="dot" style="background: var(--ink)"></i>reset to min</span></div>
+      <svg class="sp t-ez" viewBox="0 0 326 72" height="72" role="img" aria-label="{{label}}">
+        <rect class="band" x="0" y="{{sp.by}}" width="326" height="{{sp.bh}}" rx="6"/>
+        <path class="ln" d="{{sp.line}}"/>
+        <path class="pt" d="{{sp.dots}}"/>
+        <path class="rs" d="{{sp.rs}}"/>
+      </svg>
+      <div class="vt">
+        <sc-for list="{{vt}}" as="v" hint-placeholder-count="8">
+          <div class="cell {{v.cls}}"><span class="h">{{v.w}}</span><span class="mono">{{v.t}}</span></div>
+        </sc-for>
+      </div>
+      <p class="xs muted">Shaded band = min to max. The week that reaches max is shown at max; the next week resets to min.</p>
+    </div>
+  </div>
+  <div class="foot">
+    <a class="btn s" href="W3-Strength.dc.html" style="min-width: 96px">Back</a>
+    <a class="btn p" href="W5-Tempo.dc.html">Next slot: Easy B</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const cur = 11, min = 4, max = 9, step = 1, N = 8, W = 326, H = 72, pad = 10;
+    const v = []; let p;
+    for (let w = 1; w <= N; w++) { const x = w === 1 ? cur : (p >= max ? min : Math.min(p + step, max)); v.push(x); p = x; }
+    const lo = Math.min(min, ...v) - 0.5, hi = Math.max(max, ...v) + 0.5;
+    const X = (i) => (i + 0.5) * W / N, Y = (val) => pad + (hi - val) / (hi - lo) * (H - 2 * pad);
+    const line = v.map((a, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(a).toFixed(1)).join(' ');
+    const dots = v.map((a, i) => 'M' + X(i).toFixed(1) + ' ' + Y(a).toFixed(1) + 'h.01').join(' ');
+    const rs = v.map((a, i) => (i > 0 && v[i - 1] >= max && a === min) ? 'M' + X(i).toFixed(1) + ' ' + Y(a).toFixed(1) + 'h.01' : '').join(' ');
+    return {
+      theme: this.props.theme ?? 'light',
+      sp: { line, dots, rs: rs.trim(), by: Y(max).toFixed(1), bh: (Y(min) - Y(max)).toFixed(1) },
+      label: 'Projected easy run distance in km, weeks 1 to 8: ' + v.join(', '),
+      vt: v.map((a, i) => ({ w: 'W' + (i + 1), t: String(a), cls: (i > 0 && v[i - 1] >= max && a === min) ? 'rs' : '' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

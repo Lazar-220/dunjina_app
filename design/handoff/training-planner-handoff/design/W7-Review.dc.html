@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review plan</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.vbars{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;align-items:end;height:104px}
+.vcol{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+.vcol i{display:block;width:100%;border-radius:6px;background:var(--ink)}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="wz">
+    <a class="ib" href="W6-Intervals.dc.html" aria-label="Back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <span class="b grow">New plan</span>
+    <span class="sm muted" style="padding-right: 8px">Step 4 of 4</span>
+  </div>
+  <div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+  <div class="scroll" style="padding-top: 18px; gap: 14px">
+    <div class="col g4">
+      <h1 class="title">Review</h1>
+      <p class="muted" style="text-wrap: pretty">The first 8 projected weeks of every slot. Check that the rules do what you expect, then save.</p>
+    </div>
+    <div class="card col g10">
+      <div class="r rb"><span class="b">Autumn base</span><span class="st">Open-ended</span></div>
+      <span class="sm muted">Starts Mon 21 Sep 2026 · 7 workouts a week · 2 strength, 5 running</span>
+      <div class="sep"></div>
+      <span class="b sm">Running volume per week (km)</span>
+      <div class="vbars" role="img" aria-label="{{vlabel}}">
+        <sc-for list="{{vol}}" as="c" hint-placeholder-count="8">
+          <div class="vcol"><span class="mono xs">{{c.km}}</span><i style="height: {{c.h}}px"></i><span class="xs muted b">{{c.w}}</span></div>
+        </sc-for>
+      </div>
+    </div>
+    <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+      <div class="card col g12 t-{{g.k}}">
+        <div class="r">
+          <span class="badge sm {{g.shape}}">{{g.code}}</span>
+          <span class="grow col"><span class="b">{{g.name}}</span><span class="xs muted">{{g.meta}}</span></span>
+          <a class="ib" href="W3-Strength.dc.html" aria-label="Edit {{g.name}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/></svg></a>
+        </div>
+        <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="1">
+          <div class="col g6">
+            <div class="r rb"><span class="b sm">{{r.title}}</span><span class="xs muted">{{r.sub}}</span></div>
+            <svg class="sp" viewBox="0 0 326 {{r.h}}" height="{{r.h}}" role="img" aria-label="{{r.label}}">
+              <rect class="band" x="0" y="{{r.sp.by}}" width="326" height="{{r.sp.bh}}" rx="5"/>
+              <path class="ln" d="{{r.sp.line}}"/>
+              <path class="pt" d="{{r.sp.dots}}"/>
+              <path class="rs" d="{{r.sp.rs}}"/>
+            </svg>
+            <div class="vt">
+              <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="8">
+                <div class="cell {{c.cls}}"><span class="h">{{c.w}}</span><span class="mono">{{c.a}}</span><sc-if value="{{c.b}}" hint-placeholder-val="{{false}}"><small class="mono">{{c.b}}</small></sc-if></div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+    <p class="xs muted c" style="padding: 4px 8px 0; text-wrap: pretty">Dark dots and highlighted cells mark the week a value resets (reps back to min, or speed steps up). Weeks after 8 follow the same rules without limit.</p>
+  </div>
+  <div class="foot">
+    <a class="btn s" href="W6-Intervals.dc.html" style="min-width: 96px">Back</a>
+    <a class="btn p" href="Main.dc.html"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Save plan</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const N = 8, W = 326, pad = 7;
+    const f = (n) => String(+n.toFixed(1));
+    const run = (c, mn, mx, s) => { const v = [], m = []; let p; for (let w = 1; w <= N; w++) { const x = w === 1 ? c : (p >= mx ? mn : Math.min(p + s, mx)); m.push(w > 1 && p >= mx); v.push(x); p = x; } return { v, m }; };
+    const str = (e) => { const r = [], k = [], m = []; let p; for (let w = 1; w <= N; w++) { let a, b; if (w === 1) { a = e.cur; b = e.kg; } else if (p[0] >= e.max) { a = e.min; b = p[1] + e.step; } else { a = Math.min(p[0] + e.x, e.max); b = p[1]; } m.push(w > 1 && b > p[1]); r.push(a); k.push(b); p = [a, b]; } return { r, k, m }; };
+    const iv = (s, Y, D) => { const v = [], m = []; let p; for (let w = 1; w <= N; w++) { const x = w === 1 ? s : ((w - 1) % D === 0 ? p + Y : p); m.push(w > 1 && x > p); v.push(x); p = x; } return { v, m }; };
+    const spark = (v, m, mn, mx, H) => {
+      const lo = Math.min(mn ?? v[0], ...v) - 0.4, hi = Math.max(mx ?? v[0], ...v) + 0.4;
+      const X = (i) => ((i + 0.5) * W / N).toFixed(1), Y = (a) => (pad + (hi - a) / (hi - lo) * (H - 2 * pad)).toFixed(1);
+      return {
+        line: v.map((a, i) => (i ? 'L' : 'M') + X(i) + ' ' + Y(a)).join(' '),
+        dots: v.map((a, i) => 'M' + X(i) + ' ' + Y(a) + 'h.01').join(' '),
+        rs: v.map((a, i) => m[i] ? 'M' + X(i) + ' ' + Y(a) + 'h.01' : '').join(' ').trim(),
+        by: mn == null ? 0 : Y(mx), bh: mn == null ? 0 : (Y(mn) - Y(mx)).toFixed(1)
+      };
+    };
+    const strRow = (title, e) => {
+      const s = str(e);
+      return { title, sub: e.sets + ' sets · ' + e.min + '–' + e.max + ' reps (+' + e.x + ') · ' + f(e.kg) + ' kg (+' + f(e.step) + ')', h: 40,
+        label: title + ', reps by week: ' + s.r.join(', '), sp: spark(s.r, s.m, e.min, e.max, 40),
+        cells: s.r.map((a, i) => ({ w: 'W' + (i + 1), a: String(a), b: f(s.k[i]), cls: s.m[i] ? 'rs' : '' })) };
+    };
+    const runRow = (title, sub, e) => {
+      const s = run(e.cur, e.min, e.max, e.step);
+      return { title, sub, h: 56, label: title + ', km by week: ' + s.v.join(', '), sp: spark(s.v, s.m, e.min, e.max, 56),
+        cells: s.v.map((a, i) => ({ w: 'W' + (i + 1), a: f(a), b: '', cls: s.m[i] ? 'rs' : '' })) };
+    };
+    const ea = run(5, 4, 9, 1), eb = run(4, 3, 6, 1), lr = run(10, 8, 16, 1), tp = run(3, 2, 6, 1), sp = iv(12, 0.5, 3);
+    const D = [{ n: 8, d: 400 }, { n: 5, d: 800 }, { n: 4, d: 1000 }];
+    const sets = 3;
+    const groups = [
+      { k: 'lo', code: 'LO', shape: 'sq', name: 'Lower body', meta: 'Mon · 3 exercises', rows: [
+        strRow('Back squat', { sets, cur: 6, min: 6, max: 10, x: 2, kg: 60, step: 2.5 }),
+        strRow('Romanian deadlift', { sets, cur: 8, min: 8, max: 12, x: 2, kg: 50, step: 5 }),
+        strRow('Walking lunge', { sets, cur: 8, min: 8, max: 12, x: 2, kg: 14, step: 2 })] },
+      { k: 'up', code: 'UP', shape: 'sq', name: 'Upper body', meta: 'Thu · 3 exercises', rows: [
+        strRow('Bench press', { sets, cur: 6, min: 6, max: 10, x: 2, kg: 45, step: 2.5 }),
+        strRow('Barbell row', { sets, cur: 8, min: 8, max: 12, x: 2, kg: 40, step: 2.5 }),
+        strRow('Overhead press', { sets, cur: 8, min: 6, max: 10, x: 2, kg: 30, step: 2.5 })] },
+      { k: 'ez', code: 'EZ', shape: '', name: 'Easy run A', meta: 'Wed', rows: [runRow('Distance', '5 km · range 4–9 · +1', { cur: 5, min: 4, max: 9, step: 1 })] },
+      { k: 'ez', code: 'EZ', shape: '', name: 'Easy run B', meta: 'Thu', rows: [runRow('Distance', '4 km · range 3–6 · +1', { cur: 4, min: 3, max: 6, step: 1 })] },
+      { k: 'lr', code: 'LR', shape: '', name: 'Long run', meta: 'Sun', rows: [runRow('Distance', '10 km · range 8–16 · +1', { cur: 10, min: 8, max: 16, step: 1 })] },
+      { k: 'tp', code: 'TP', shape: '', name: 'Tempo', meta: 'Fri · 2.0 km warm-up, 1.5 km cool-down', rows: [runRow('Tempo distance', '3 km · range 2–6 · +1', { cur: 3, min: 2, max: 6, step: 1 })] },
+      { k: 'iv', code: 'IV', shape: '', name: 'Intervals', meta: 'Tue · 3-draft cycle', rows: [{
+        title: 'Speed (km/h)', sub: '12.0 start · +0.5 per cycle', h: 48, label: 'Interval speed by week: ' + sp.v.join(', '), sp: spark(sp.v, sp.m, null, null, 48),
+        cells: sp.v.map((a, i) => ({ w: 'W' + (i + 1), a: 'D' + (((i) % 3) + 1), b: a.toFixed(1), cls: sp.m[i] ? 'rs' : '' })) }] }
+    ];
+    const volk = [];
+    for (let i = 0; i < N; i++) { const d = D[i % 3]; volk.push(ea.v[i] + eb.v[i] + lr.v[i] + (2 + tp.v[i] + 1.5) + (2 + 1.5 + d.n * d.d / 1000)); }
+    const mx = Math.max(...volk);
+    return { theme: this.props.theme ?? 'light', groups,
+      vol: volk.map((k, i) => ({ w: 'W' + (i + 1), km: String(Math.round(k)), h: Math.round(k / mx * 62) })),
+      vlabel: 'Running km per week, weeks 1 to 8: ' + volk.map((k) => Math.round(k)).join(', ') };
+  }
+}
+</script>
+</body>
+</html>

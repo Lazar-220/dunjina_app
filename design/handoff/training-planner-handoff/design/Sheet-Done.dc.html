@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mark workout as done</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.ex{border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.imp3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.imp3>div{background:var(--surface2);border-radius:11px;padding:6px 8px;display:flex;flex-direction:column;gap:1px;font-size:13px}
+.imp3 small{font-size:12px;color:var(--ink2);font-weight:600}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div style="position: absolute; inset: 0">
+    <dc-import name="Main" theme="{{theme}}" hint-size="390px,844px"></dc-import>
+  </div>
+  <div class="scrim"></div>
+  <div class="sheet t-up" role="dialog" aria-label="Mark Upper body as done" style="max-height: 95%">
+    <div class="grab"></div>
+    <div class="r">
+      <span class="badge sq">UP</span>
+      <div class="grow col g4"><h2 style="font-size: 21px; font-weight: 700">Mark as done</h2><span class="sm muted">Upper body · Thu 22 Oct</span></div>
+      <a class="ib" href="Sheet-View.dc.html" aria-label="Back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    </div>
+    <div class="body">
+      <p class="sm muted" style="text-wrap: pretty">Values start from the plan. Change only what was different; your numbers become the baseline for the weeks after.</p>
+      <sc-for list="{{ex}}" as="e" hint-placeholder-count="3">
+        <div class="ex">
+          <div class="r rb"><span class="b">{{e.name}}</span><span class="r g6"><sc-if value="{{e.mod}}" hint-placeholder-val="{{false}}"><span class="mod">edited</span></sc-if><span class="xs muted">plan {{e.plan}}</span></span></div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+            <div class="step {{e.rCls}}"><button onClick="{{e.rDec}}" aria-label="One rep less"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">{{e.reps}}<span class="u">reps</span></span><button onClick="{{e.rInc}}" aria-label="One rep more"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+            <div class="step {{e.kCls}}"><button onClick="{{e.kDec}}" aria-label="2.5 kg less"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">{{e.kg}}<span class="u">kg</span></span><button onClick="{{e.kInc}}" aria-label="2.5 kg more"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{changed}}" hint-placeholder-val="{{true}}">
+        <div class="col g8">
+          <div class="banner warn" style="align-items: center"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg><span><b>This changes the next weeks.</b> Check the preview before saving.</span></div>
+          <sc-for list="{{imp}}" as="m">
+            <div class="ex">
+              <span class="b sm">{{m.name}}</span>
+              <div class="imp3">
+                <sc-for list="{{m.cells}}" as="c">
+                  <div><small>{{c.w}}</small>
+                    <sc-if value="{{c.diff}}" hint-placeholder-val="{{true}}"><span class="mono"><span class="was">{{c.was}}</span><br><b>{{c.now}}</b></span></sc-if>
+                    <sc-if value="{{c.same}}" hint-placeholder-val="{{false}}"><span class="mono muted">{{c.now}}<br>unchanged</span></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{matches}}" hint-placeholder-val="{{false}}">
+        <div class="banner ok" style="align-items: center"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Matches the plan. Later weeks stay as generated.</span></div>
+      </sc-if>
+    </div>
+    <div class="r g8">
+      <a class="btn s" href="Sheet-View.dc.html" style="min-width: 96px">Cancel</a>
+      <a class="btn p grow" href="Main.dc.html"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Save as done</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { d: [[6, 47.5], [10, 40], [10, 32.5]] }; }
+  renderVals() {
+    const N = 9, f = (v) => String(+v.toFixed(1));
+    const str = (e, o = {}) => { const a = []; let p; for (let w = 1; w <= N; w++) { let r, k; if (w === 1) { r = e.cur; k = e.kg; } else if (p[0] >= e.max) { r = e.min; k = p[1] + e.step; } else { r = Math.min(p[0] + e.x, e.max); k = p[1]; } if (o[w]) { r = o[w][0]; k = o[w][1]; } a.push([r, k]); p = [r, k]; } return a; };
+    const cfg = [
+      { n: 'Bench press', e: { cur: 6, min: 6, max: 10, x: 2, kg: 45, step: 2.5 } },
+      { n: 'Barbell row', e: { cur: 8, min: 8, max: 12, x: 2, kg: 40, step: 2.5 } },
+      { n: 'Overhead press', e: { cur: 8, min: 6, max: 10, x: 2, kg: 30, step: 2.5 } }];
+    const d = this.state.d;
+    const bump = (i, j, delta) => () => { const nd = d.map((x) => x.slice()); nd[i][j] = Math.max(j ? 0 : 1, +(nd[i][j] + delta).toFixed(1)); this.setState({ d: nd }); };
+    const imp = [];
+    const ex = cfg.map((c, i) => {
+      const base = str(c.e), now = str(c.e, { 5: d[i] }), plan = base[4];
+      const rMod = d[i][0] !== plan[0], kMod = d[i][1] !== plan[1];
+      const cells = [6, 7, 8].map((w) => { const b = base[w - 1], a = now[w - 1], diff = b[0] !== a[0] || b[1] !== a[1]; return { w: 'W' + w, was: b[0] + '@' + f(b[1]), now: a[0] + '@' + f(a[1]), diff, same: !diff }; });
+      if (cells.some((x) => x.diff)) imp.push({ name: c.n, cells });
+      return { name: c.n, plan: plan[0] + ' × ' + f(plan[1]), reps: d[i][0], kg: f(d[i][1]), mod: rMod || kMod, rCls: rMod ? 'mod' : '', kCls: kMod ? 'mod' : '',
+        rDec: bump(i, 0, -1), rInc: bump(i, 0, 1), kDec: bump(i, 1, -2.5), kInc: bump(i, 1, 2.5) };
+    });
+    return { theme: this.props.theme ?? 'light', ex, imp, changed: imp.length > 0, matches: imp.length === 0 };
+  }
+}
+</script>
+</body>
+</html>

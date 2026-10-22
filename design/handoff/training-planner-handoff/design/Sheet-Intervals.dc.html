@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mark intervals as done</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.ex{border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.imp3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.imp3>div{background:var(--surface2);border-radius:11px;padding:6px 8px;display:flex;flex-direction:column;gap:1px;font-size:13px}
+.imp3 small{font-size:12px;color:var(--ink2);font-weight:600}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div style="position: absolute; inset: 0">
+    <dc-import name="Weeks" mode="list" theme="{{theme}}" hint-size="390px,844px"></dc-import>
+  </div>
+  <div class="scrim"></div>
+  <div class="sheet t-iv" role="dialog" aria-label="Mark Intervals as done" style="max-height: 95%">
+    <div class="grab"></div>
+    <div class="r">
+      <span class="badge">IV</span>
+      <div class="grow col g4"><h2 style="font-size: 21px; font-weight: 700">Mark as done</h2><span class="sm muted">Intervals · Draft 2 of 3 · Tue 20 Oct</span></div>
+      <a class="ib" href="Weeks.dc.html" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    </div>
+    <div class="body">
+      <div class="ex">
+        <div class="r rb"><span class="b">Speed</span><span class="st" style="background: var(--ink); color: var(--bg)">All later weeks</span></div>
+        <div class="step mod"><button aria-label="0.5 km/h slower"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">12.0<span class="u">km/h</span></span><button aria-label="0.5 km/h faster"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+        <div class="r rb"><span class="xs muted">plan 12.5 km/h</span><span class="mod">edited</span></div>
+        <div class="col g6">
+          <span class="lbl">Speed in the next weeks</span>
+          <div class="imp3">
+            <div><small>W6 · D3</small><span class="mono"><span class="was">12.5</span><br><b>12.0</b></span></div>
+            <div><small>W7 · D1</small><span class="mono"><span class="was">13.0</span><br><b>12.5</b></span></div>
+            <div><small>W8 · D2</small><span class="mono"><span class="was">13.0</span><br><b>12.5</b></span></div>
+          </div>
+          <span class="xs muted">From here the speed still rises 0.5 km/h after each full 3-week cycle.</span>
+        </div>
+      </div>
+      <div class="ex">
+        <div class="r rb"><span class="b">Session</span><span class="st">This session only</span></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+          <div class="field"><span class="lbl">Intervals</span><div class="step mod"><button aria-label="One fewer"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">4</span><button aria-label="One more"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+          <div class="field"><span class="lbl">Distance each</span><div class="step"><button aria-label="Shorter"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">800<span class="u">m</span></span><button aria-label="Longer"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+          <div class="field"><span class="lbl">Rest between</span><div class="step"><button aria-label="Less rest"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">90<span class="u">s</span></span><button aria-label="More rest"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        </div>
+        <div class="banner info" style="align-items: center; padding: 8px 10px; font-size: 13px">
+          <svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          <span>Plan said 5 intervals. Count, distance and rest don’t carry forward: Draft 2 returns as 5 × 800 m, 90 s in W8.</span>
+        </div>
+      </div>
+    </div>
+    <div class="r g8">
+      <a class="btn s" href="Weeks.dc.html" style="min-width: 96px">Cancel</a>
+      <a class="btn p grow" href="Weeks.dc.html"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Save as done</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>States and components</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.sp1{display:flex;flex-direction:column;gap:10px;min-width:0}
+.cap{font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
+.cap span{font-weight:550;color:var(--ink2)}
+.stage{background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px;position:relative;min-height:120px}
+.dlg{background:var(--surface);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 1260px; height: 1180px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 24px; padding: 32px; align-content: start">
+
+  <div class="sp1">
+    <div class="cap">Field error <span>blocks Next</span></div>
+    <div class="stage">
+      <div class="field">
+        <span class="lbl">End date</span>
+        <div class="inp err" style="justify-content: space-between"><span>Mon 14 Sep 2026</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></div>
+        <span class="hint err r g6"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg>End date must be after the start date.</span>
+      </div>
+      <div class="btn off blk">Next: weekly structure</div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Min above max <span>blocks Next</span></div>
+    <div class="stage">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <div class="field"><span class="lbl">Min km</span><div class="step err"><button aria-label="Lower"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">10.0<span class="u">km</span></span><button aria-label="Raise"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Max km</span><div class="step err"><button aria-label="Lower"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">8.0<span class="u">km</span></span><button aria-label="Raise"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+      </div>
+      <div class="banner err" role="alert"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg><span><b>Min is above max.</b> Set min to 8 km or lower, or raise max.</span></div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Outside range <span>warning, can continue</span></div>
+    <div class="stage">
+      <div class="field"><span class="lbl">Current km</span><div class="step warn"><button aria-label="Less"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">11.0<span class="u">km</span></span><button aria-label="More"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+      <div class="banner warn"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg><span>Above max (9 km). Week 1 runs 11 km, then week 2 resets to 4 km.</span></div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Loading <span>weeks load on demand</span></div>
+    <div class="stage" aria-busy="true">
+      <div class="sk" style="height: 18px; width: 40%"></div>
+      <div class="sk" style="height: 56px; border-radius: 16px"></div>
+      <div class="sk" style="height: 56px; border-radius: 16px"></div>
+      <span class="sm muted c">Generating weeks 9–12…</span>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Success feedback <span>toast, 5 s, with undo</span></div>
+    <div class="stage" style="gap: 10px">
+      <div class="toast" style="position: static"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Upper body marked done<span class="act">Undo</span></div>
+      <div class="toast" style="position: static"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Backup saved to this device<span class="act">Open</span></div>
+      <div class="toast" style="position: static"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Moved to Fri 23 Oct<span class="act">Undo</span></div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Import: confirm <span>replaces local data</span></div>
+    <div class="stage" style="background: var(--scrim)">
+      <div class="dlg">
+        <h3 style="font-size: 18px; font-weight: 700">Replace data on this device?</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+          <div class="card col g4" style="padding: 10px"><span class="xs muted b">This backup</span><span class="b">1 plan · 31 workouts</span><span class="xs muted">saved 22 Oct 2026</span></div>
+          <div class="card col g4" style="padding: 10px"><span class="xs muted b">On this device</span><span class="b">1 plan · 26 workouts</span><span class="xs muted">last backup 10 Oct</span></div>
+        </div>
+        <div class="col g8">
+          <button class="btn d blk">Replace data</button>
+          <button class="btn blk">Export current data first</button>
+          <button class="btn blk">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Import: error <span>nothing is changed</span></div>
+    <div class="stage">
+      <div class="banner err" role="alert"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg><span><b>Can’t read this file.</b> It isn’t a Training Planner backup (format marker missing). Nothing was changed.</span></div>
+      <div class="banner err" role="alert"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg><span><b>Newer backup format (v2).</b> Update the app to import this file.</span></div>
+      <button class="btn s blk">Choose another file</button>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Delete workout <span>confirm</span></div>
+    <div class="stage" style="background: var(--scrim)">
+      <div class="dlg">
+        <h3 style="font-size: 18px; font-weight: 700">Delete Upper body on Thu 22 Oct?</h3>
+        <p class="muted" style="text-wrap: pretty">Only this workout is removed. Later weeks keep their values.</p>
+        <div class="col g8">
+          <button class="btn d blk">Delete workout</button>
+          <button class="btn blk">Keep</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Workout states</div>
+    <div class="stage" style="gap: 8px">
+      <div class="wk t-up draft"><span class="badge sq draft">UP</span><span class="grow col"><span class="nm">Draft</span><span class="ds">Generated, dashed outline</span></span></div>
+      <div class="wk t-iv"><span class="badge">IV</span><span class="grow col"><span class="nm">Confirmed</span><span class="ds">Solid outline, you set or moved it</span></span></div>
+      <div class="wk t-lo done"><span class="badge sq">LO</span><span class="grow col"><span class="nm r g6">Done <svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="mod">edited</span></span><span class="ds">Tinted fill, check, edited marker</span></span></div>
+      <div class="wk t-ez lift" style="transform: none"><span class="badge">EZ</span><span class="grow col"><span class="nm">Dragging</span><span class="ds">Lifted with shadow</span></span></div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Progression tags <span>weeks list</span></div>
+    <div class="stage" style="gap: 10px">
+      <div class="r g10"><span class="st">Max</span><span class="sm muted">value reached max this week</span></div>
+      <div class="r g10"><span class="st">Reset</span><span class="sm muted">back to min after reaching max</span></div>
+      <div class="r g10"><span class="st">Weight step</span><span class="sm muted">reps reset, weight goes up</span></div>
+      <div class="r g10"><span class="st">Speed +0.5</span><span class="sm muted">new interval cycle begins</span></div>
+      <div class="r g10"><span class="mod">edited</span><span class="sm muted">you changed it; <span class="was">generated</span> value struck</span></div>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Type colours <span>light + dark</span></div>
+    <div class="stage" style="gap: 12px">
+      <div class="sw">
+        <span class="t-lo"><span class="badge sq sm">LO</span></span><span class="t-up"><span class="badge sq sm">UP</span></span><span class="t-ez"><span class="badge sm">EZ</span></span><span class="t-lr"><span class="badge sm">LR</span></span><span class="t-tp"><span class="badge sm">TP</span></span><span class="t-iv"><span class="badge sm">IV</span></span>
+      </div>
+      <div class="app" data-theme="dark" style="width: auto; height: auto; border-radius: 14px; padding: 10px; flex-direction: row; gap: 8px; flex-wrap: wrap">
+        <span class="t-lo"><span class="badge sq sm">LO</span></span><span class="t-up"><span class="badge sq sm">UP</span></span><span class="t-ez"><span class="badge sm">EZ</span></span><span class="t-lr"><span class="badge sm">LR</span></span><span class="t-tp"><span class="badge sm">TP</span></span><span class="t-iv"><span class="badge sm">IV</span></span>
+      </div>
+      <span class="xs muted">Square = strength, circle = running, plus a two-letter code. Colour is never the only signal.</span>
+    </div>
+  </div>
+
+  <div class="sp1">
+    <div class="cap">Empty: Weeks, no plan</div>
+    <div class="stage" style="align-items: center; text-align: center; padding: 22px 16px">
+      <h3 style="font-size: 18px; font-weight: 700">No weeks to show</h3>
+      <p class="sm muted" style="text-wrap: pretty">Weeks appear once you have an active plan.</p>
+      <button class="btn p">Create plan</button>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1260,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

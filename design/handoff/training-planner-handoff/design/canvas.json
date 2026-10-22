@@ -1,0 +1,48 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-22T19:45:00Z" },
+  "title": "Training Planner v1",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 390, "h": 844, "title": "Calendar · month", "is_interactive": true, "radius": 28 },
+    "Cal-Week.dc.html": { "x": 470, "y": 0, "w": 390, "h": 844, "title": "Calendar · week + drag", "is_interactive": true, "radius": 28 },
+    "Cal-Move.dc.html": { "x": 940, "y": 0, "w": 390, "h": 844, "title": "Move to… (no-drag)", "is_interactive": true, "radius": 28 },
+    "Cal-Add.dc.html": { "x": 1410, "y": 0, "w": 390, "h": 844, "title": "Add workout (+)", "is_interactive": true, "radius": 28 },
+    "Cal-Empty.dc.html": { "x": 1880, "y": 0, "w": 390, "h": 844, "title": "Calendar · no active plan", "is_interactive": true, "radius": 28 },
+    "Cal-Month-Dark.dc.html": { "x": 2350, "y": 0, "w": 390, "h": 844, "title": "Calendar · dark", "is_interactive": true, "radius": 28 },
+
+    "W1-Basics.dc.html": { "x": 0, "y": 1300, "w": 390, "h": 844, "title": "Wizard 1 · Basics (validation)", "is_interactive": true, "radius": 28 },
+    "W2-Structure.dc.html": { "x": 470, "y": 1300, "w": 390, "h": 844, "title": "Wizard 2 · Weekly structure", "is_interactive": true, "radius": 28 },
+    "W3-Strength.dc.html": { "x": 940, "y": 1300, "w": 390, "h": 844, "title": "Wizard 3 · Strength slot", "is_interactive": true, "radius": 28 },
+    "W4-EasyRun.dc.html": { "x": 1410, "y": 1300, "w": 390, "h": 844, "title": "Wizard 3 · Easy / long run (warning)", "is_interactive": true, "radius": 28 },
+    "W5-Tempo.dc.html": { "x": 1880, "y": 1300, "w": 390, "h": 844, "title": "Wizard 3 · Tempo", "is_interactive": true, "radius": 28 },
+    "W6-Intervals.dc.html": { "x": 2350, "y": 1300, "w": 390, "h": 844, "title": "Wizard 3 · Intervals", "is_interactive": true, "radius": 28 },
+    "W7-Review.dc.html": { "x": 2820, "y": 1300, "w": 390, "h": 844, "title": "Wizard 4 · Review (8-week projection)", "is_interactive": true, "radius": 28 },
+
+    "Weeks.dc.html": { "x": 0, "y": 2600, "w": 390, "h": 844, "title": "Weeks", "is_interactive": true, "radius": 28 },
+    "Weeks-Edit.dc.html": { "x": 470, "y": 2600, "w": 390, "h": 844, "title": "Weeks · inline edit + load more", "is_interactive": true, "radius": 28 },
+    "Sheet-View.dc.html": { "x": 940, "y": 2600, "w": 390, "h": 844, "title": "Workout sheet · strength", "is_interactive": true, "radius": 28 },
+    "Sheet-Done.dc.html": { "x": 1410, "y": 2600, "w": 390, "h": 844, "title": "Mark as done · live impact preview", "is_interactive": true, "radius": 28 },
+    "Sheet-Intervals.dc.html": { "x": 1880, "y": 2600, "w": 390, "h": 844, "title": "Mark as done · intervals", "is_interactive": true, "radius": 28 },
+    "Weeks-Dark.dc.html": { "x": 2350, "y": 2600, "w": 390, "h": 844, "title": "Weeks · dark", "is_interactive": true, "radius": 28 },
+
+    "Plans.dc.html": { "x": 0, "y": 3900, "w": 390, "h": 844, "title": "Plans", "is_interactive": true, "radius": 28 },
+    "Plan-End.dc.html": { "x": 470, "y": 3900, "w": 390, "h": 844, "title": "End plan (confirm)", "is_interactive": true, "radius": 28 },
+    "Settings.dc.html": { "x": 940, "y": 3900, "w": 390, "h": 844, "title": "Settings · backup first", "is_interactive": true, "radius": 28 },
+    "States.dc.html": { "x": 1410, "y": 3900, "w": 1260, "h": 1180, "title": "States & components" }
+  },
+  "order": [
+    "Main.dc.html", "Cal-Week.dc.html", "Cal-Move.dc.html", "Cal-Add.dc.html", "Cal-Empty.dc.html", "Cal-Month-Dark.dc.html",
+    "W1-Basics.dc.html", "W2-Structure.dc.html", "W3-Strength.dc.html", "W4-EasyRun.dc.html", "W5-Tempo.dc.html", "W6-Intervals.dc.html", "W7-Review.dc.html",
+    "Weeks.dc.html", "Weeks-Edit.dc.html", "Sheet-View.dc.html", "Sheet-Done.dc.html", "Sheet-Intervals.dc.html", "Weeks-Dark.dc.html",
+    "Plans.dc.html", "Plan-End.dc.html", "Settings.dc.html", "States.dc.html"
+  ],
+  "notes": {
+    "t1": { "x": 0, "y": -300, "text": "1 · Calendar", "kind": "title1", "maxW": 2740 },
+    "t2": { "x": 0, "y": 1000, "text": "2 · Create plan wizard", "kind": "title1", "maxW": 3210 },
+    "t3": { "x": 0, "y": 2300, "text": "3 · Weeks and workout sheets", "kind": "title1", "maxW": 2740 },
+    "t4": { "x": 0, "y": 3600, "text": "4 · Plans, settings, states", "kind": "title1", "maxW": 2670 }
+  },
+  "designSystems": []
+}

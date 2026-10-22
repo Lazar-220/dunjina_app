@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Weeks</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.whead{width:100%;min-height:64px;padding:12px 14px;display:flex;align-items:center;gap:10px;text-align:left}
+.wbody{padding:0 12px 12px;display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line)}
+.wrow{display:flex;flex-direction:column;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.wrow:last-of-type{border-bottom:0}
+.wdb{min-width:46px;height:44px;border-radius:12px;border:1.5px solid var(--line2);background:var(--surface);font-weight:650;font-size:14px;display:grid;place-items:center;flex:none}
+.edp{margin-left:42px;padding:12px;border-radius:16px;background:var(--surface2);display:flex;flex-direction:column;gap:12px}
+.dgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dgrid button{min-height:44px;border-radius:11px;border:1.5px solid var(--line2);background:var(--surface);font-size:12px;font-weight:650;display:grid;place-items:center}
+.dgrid button.on{background:var(--btn);color:var(--on-btn);border-color:var(--btn)}
+.imp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.imp div{background:var(--surface);border-radius:11px;padding:6px 8px;display:flex;flex-direction:column;gap:1px;font-size:13px}
+.imp small{font-size:12px;color:var(--ink2);font-weight:600}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="top">
+    <div class="grow col g4">
+      <span class="sm muted">Autumn base · open-ended</span>
+      <h1 class="title">Weeks</h1>
+    </div>
+    <button class="chip"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add workout</button>
+  </div>
+  <div class="scroll" style="padding-top: 4px">
+    <sc-for list="{{weeks}}" as="wk" hint-placeholder-count="3">
+      <section class="card" style="padding: 0; overflow: hidden">
+        <button class="whead" onClick="{{wk.toggle}}" aria-expanded="{{wk.open}}">
+          <span class="grow col g4">
+            <span class="r g8"><b style="font-size: 17px">Week {{wk.w}}</b><sc-if value="{{wk.cur}}" hint-placeholder-val="{{false}}"><span class="st">This week</span></sc-if></span>
+            <span class="sm muted">{{wk.range}} · {{wk.info}}</span>
+          </span>
+          <span class="col" style="align-items: flex-end"><span class="b">≈ {{wk.km}} km</span><span class="xs muted">running</span></span>
+          <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
+        </button>
+        <sc-if value="{{wk.open}}" hint-placeholder-val="{{false}}">
+          <div class="wbody">
+            <sc-if value="{{wk.hasDone}}" hint-placeholder-val="{{false}}">
+              <div class="r g6" style="flex-wrap: wrap; padding: 10px 0 6px">
+                <span class="xs muted b">Done</span>
+                <sc-for list="{{wk.done}}" as="d">
+                  <span class="tag t-{{d.k}}"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>{{d.name}}<sc-if value="{{d.mod}}" hint-placeholder-val="{{false}}"><span class="mod" style="height: 18px">edited</span></sc-if></span>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-for list="{{wk.rows}}" as="r" hint-placeholder-count="4">
+              <div class="wrow t-{{r.k}}">
+                <div class="r" style="gap: 8px">
+                  <a class="r grow" style="gap: 8px; min-width: 0; align-items: flex-start" href="Sheet-View.dc.html">
+                    <span class="badge sm draft {{r.shape}}">{{r.code}}</span>
+                    <span class="grow col" style="min-width: 0; gap: 1px">
+                      <span class="r g6" style="flex-wrap: wrap"><span class="nm" style="font-size: 15px; font-weight: 650">{{r.name}}</span>
+                        <sc-if value="{{r.mod}}" hint-placeholder-val="{{false}}"><span class="mod">edited</span></sc-if>
+                        <sc-if value="{{r.tag}}" hint-placeholder-val="{{false}}"><span class="st">{{r.tag}}</span></sc-if>
+                      </span>
+                      <span class="ds" style="font-size: 13px; color: var(--ink2)">{{r.vals}}<sc-if value="{{r.was}}" hint-placeholder-val="{{false}}"> <span class="was">{{r.was}}</span></sc-if></span>
+                      <sc-if value="{{r.note}}" hint-placeholder-val="{{false}}"><span class="xs muted">{{r.note}}</span></sc-if>
+                    </span>
+                  </a>
+                  <svg class="sp" viewBox="0 0 52 28" width="52" height="28" style="width: 52px; flex: none" role="img" aria-label="{{r.label}}">
+                    <path class="ln" d="{{r.sp.line}}"/>
+                    <path class="cu" d="{{r.sp.cur}}"/>
+                    <path class="cu2" d="{{r.sp.cur}}"/>
+                  </svg>
+                  <button class="wdb" aria-label="Weekday {{r.day}}, change">{{r.day}}</button>
+                  <sc-if value="{{r.canEdit}}" hint-placeholder-val="{{false}}"><button class="ib o" onClick="{{r.editToggle}}" aria-label="Edit {{r.name}} inline" aria-expanded="{{r.editing}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/></svg></button></sc-if>
+                  <sc-if value="{{r.noEdit}}" hint-placeholder-val="{{false}}"><a class="ib o" href="Sheet-View.dc.html" aria-label="Open {{r.name}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/></svg></a></sc-if>
+                </div>
+                <sc-if value="{{r.editing}}" hint-placeholder-val="{{false}}">
+                  <div class="edp">
+                    <div class="r g10">
+                      <div class="step grow {{r.ed.stepCls}}"><button onClick="{{r.ed.dec}}" aria-label="One km less"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">{{r.ed.val}}<span class="u">km</span></span><button onClick="{{r.ed.inc}}" aria-label="One km more"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+                    </div>
+                    <div class="col g6"><span class="lbl">Weekday</span>
+                      <div class="dgrid"><button>Mon</button><button>Tue</button><button>Wed</button><button>Thu</button><button>Fri</button><button>Sat</button><button class="on" aria-pressed="true">Sun</button></div>
+                    </div>
+                    <div class="col g6"><span class="lbl">Later weeks recalculate from this value</span>
+                      <div class="imp">
+                        <sc-for list="{{r.ed.imp}}" as="m"><div><small>{{m.w}}</small><span class="mono"><span class="was">{{m.from}}</span> → <b>{{m.to}}</b></span></div></sc-for>
+                      </div>
+                    </div>
+                    <div class="r g8">
+                      <button class="btn s grow" onClick="{{r.ed.reset}}" style="min-height: 46px; padding: 0 10px"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10H9M4 9l4-4M4 9l4 4"/></svg>Reset to {{r.ed.gen}} km</button>
+                      <button class="btn p" onClick="{{r.editToggle}}" style="min-height: 46px">Done</button>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{wk.edited}}" hint-placeholder-val="{{false}}">
+              <button class="btn s blk" onClick="{{wk.resetWeek}}" style="margin-top: 6px; min-height: 46px"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10H9M4 9l4-4M4 9l4 4"/></svg>Reset week to generated values</button>
+            </sc-if>
+          </div>
+        </sc-if>
+      </section>
+    </sc-for>
+    <sc-if value="{{loading}}" hint-placeholder-val="{{false}}">
+      <div class="col g10" aria-busy="true" aria-label="Loading more weeks">
+        <div class="sk" style="height: 64px; border-radius: 18px"></div>
+        <div class="sk" style="height: 64px; border-radius: 18px"></div>
+        <span class="sm muted c">Loading weeks 9–12…</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{more}}" hint-placeholder-val="{{true}}">
+      <button class="btn s blk">Load more weeks</button>
+    </sc-if>
+  </div>
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab" href="Main.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span>Calendar</a>
+    <a class="tab on" href="Weeks.dc.html" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>Weeks</a>
+    <a class="tab" href="Plans.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 5-9 5-9-5 9-5z"/><path d="M3 14l9 5 9-5"/></svg></span>Plans</a>
+    <a class="tab" href="Settings.dc.html"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg></span>Settings</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"mode":{"editor":"enum","options":["list","edit"],"default":"list"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const edit = (props.mode ?? 'list') === 'edit';
+    this.state = { open: edit ? { 6: true } : { 5: true, 6: true }, editing: edit, ov: 13 };
+  }
+  renderVals() {
+    const N = 14, mode = this.props.mode ?? 'list', st = this.state;
+    const f = (v) => String(+v.toFixed(1));
+    // progression rules from the spec
+    const run = (cur, min, max, step, o = {}) => { const a = []; let p; for (let w = 1; w <= N; w++) { let v = w === 1 ? cur : (p >= max ? min : Math.min(p + step, max)); if (o[w] != null) v = o[w]; a.push(v); p = v; } return a; };
+    const str = (e, o = {}) => { const a = []; let p; for (let w = 1; w <= N; w++) { let r, k; if (w === 1) { r = e.cur; k = e.kg; } else if (p[0] >= e.max) { r = e.min; k = p[1] + e.step; } else { r = Math.min(p[0] + e.x, e.max); k = p[1]; } if (o[w]) { r = o[w][0]; k = o[w][1]; } a.push([r, k]); p = [r, k]; } return a; };
+    const iv = (s, Y, D, o = {}) => { const a = []; let p; for (let w = 1; w <= N; w++) { let v = w === 1 ? s : ((w - 1) % D === 0 ? p + Y : p); if (o[w] != null) v = o[w]; a.push(v); p = v; } return a; };
+    const LO = [str({ cur: 6, min: 6, max: 10, x: 2, kg: 60, step: 2.5 }, { 4: [6, 60] }), str({ cur: 8, min: 8, max: 12, x: 2, kg: 50, step: 5 }), str({ cur: 8, min: 8, max: 12, x: 2, kg: 14, step: 2 })];
+    const UP = [str({ cur: 6, min: 6, max: 10, x: 2, kg: 45, step: 2.5 }), str({ cur: 8, min: 8, max: 12, x: 2, kg: 40, step: 2.5 }), str({ cur: 8, min: 6, max: 10, x: 2, kg: 30, step: 2.5 })];
+    const EA = run(5, 4, 9, 1), EB = run(4, 3, 6, 1), TP = run(3, 2, 6, 1);
+    const LRg = run(10, 8, 16, 1), LR = run(10, 8, 16, 1, st.ov != null ? { 6: st.ov } : {});
+    const SP = iv(12, 0.5, 3, { 5: 12 }), SPg = iv(12, 0.5, 3);
+    const DR = [{ n: 8, d: 400 }, { n: 5, d: 800 }, { n: 4, d: 1000 }];
+    const mini = (vals) => {
+      const lo = Math.min(...vals), hi = Math.max(...vals), X = (i) => (3 + i * 46 / 7).toFixed(1), Y = (a) => (hi === lo ? 14 : 4 + (hi - a) / (hi - lo) * 20).toFixed(1);
+      return { line: vals.map((a, i) => (i ? 'L' : 'M') + X(i) + ' ' + Y(a)).join(' '), cur: 'M' + X(3) + ' ' + Y(vals[3]) + 'h.01' };
+    };
+    const win = (arr, w) => arr.slice(w - 4, w + 4);
+    const strRow = (key, w) => {
+      const L = key === 'lo' ? LO : UP, ab = key === 'lo' ? ['Squat', 'RDL', 'Lunge'] : ['Bench', 'Row', 'OHP'];
+      const up = L.some((e) => e[w - 1][1] > e[w - 2][1]);
+      return { k: key, code: key === 'lo' ? 'LO' : 'UP', shape: 'sq', name: key === 'lo' ? 'Lower body' : 'Upper body', day: key === 'lo' ? 'Mon' : 'Thu',
+        vals: L.map((e, i) => ab[i] + ' ' + e[w - 1][0] + '@' + f(e[w - 1][1])).join(' · '), tag: up ? 'Weight step' : '', sp: mini(win(L[0].map((x) => x[0]), w)), label: 'Reps trend' };
+    };
+    const runRow = (key, code, name, day, arr, min, max, w, extra) => {
+      const v = arr[w - 1], p = arr[w - 2];
+      return { k: key, code, shape: '', name, day, vals: f(v) + ' km' + (extra || ''), tag: p >= max ? 'Reset' : (v === max ? 'Max' : ''), sp: mini(win(arr, w)), label: 'Distance trend' };
+    };
+    const ivRow = (w) => {
+      const d = DR[(w - 1) % 3], s = SP[w - 1];
+      return { k: 'iv', code: 'IV', shape: '', name: 'Intervals', day: 'Tue', vals: 'D' + (((w - 1) % 3) + 1) + ' · ' + d.n + ' × ' + d.d + ' m · ' + s.toFixed(1) + ' km/h',
+        tag: s > SP[w - 2] ? 'Speed +0.5' : '', note: s !== SPg[w - 1] ? 'Follows your W5 speed edit · plan ' + SPg[w - 1].toFixed(1) : '', sp: mini(win(SP, w)), label: 'Speed trend' };
+    };
+    const build = (key, w) => {
+      if (key === 'lo' || key === 'up') return strRow(key, w);
+      if (key === 'iv') return ivRow(w);
+      if (key === 'ea') return runRow('ez', 'EZ', 'Easy run', 'Wed', EA, 4, 9, w);
+      if (key === 'eb') return runRow('ez', 'EZ', 'Easy run', 'Thu', EB, 3, 6, w);
+      if (key === 'tp') return runRow('tp', 'TP', 'Tempo', 'Fri', TP, 2, 6, w, ' tempo · + 3.5 fixed');
+      return runRow('lr', 'LR', 'Long run', 'Sun', LR, 8, 16, w);
+    };
+    const kmOf = (w) => { const d = DR[(w - 1) % 3], n = w === 5 ? 4 : d.n; return EA[w - 1] + EB[w - 1] + LR[w - 1] + (3.5 + TP[w - 1]) + (3.5 + n * d.d / 1000); };
+    const MN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const range = (w) => { const a = new Date(2026, 8, 21 + 7 * (w - 1)), b = new Date(2026, 8, 21 + 7 * (w - 1) + 6); return a.getDate() + ' ' + MN[a.getMonth()] + ' – ' + b.getDate() + ' ' + MN[b.getMonth()]; };
+    const keys = ['lo', 'iv', 'ea', 'up', 'eb', 'tp', 'lr'];
+    const shown = mode === 'edit' ? [5, 6, 7, 8] : [5, 6, 7];
+    const edited6 = st.ov != null && st.ov !== LRg[5];
+    const gen = LRg[5], ed = {
+      val: f(LR[5]), gen: f(gen), stepCls: edited6 ? 'mod' : '',
+      inc: () => this.setState({ ov: Math.min(16, (st.ov != null ? st.ov : gen) + 1) }),
+      dec: () => this.setState({ ov: Math.max(8, (st.ov != null ? st.ov : gen) - 1) }),
+      reset: () => this.setState({ ov: null }),
+      imp: [7, 8, 9].map((w) => ({ w: 'W' + w, from: f(LRg[w - 1]), to: f(LR[w - 1]) }))
+    };
+    const weeks = shown.map((w) => {
+      const doneKeys = w === 5 ? ['lo', 'iv', 'ea'] : [];
+      const rows = keys.filter((k) => doneKeys.indexOf(k) < 0).map((k) => {
+        const r = build(k, w), isLR = k === 'lr' && w === 6, editing = isLR && st.editing;
+        r.mod = isLR && edited6; r.was = isLR && edited6 ? f(LRg[5]) + ' km' : '';
+        r.canEdit = isLR; r.noEdit = !isLR; r.editing = editing;
+        r.editToggle = () => this.setState({ editing: !st.editing });
+        r.ed = ed;
+        return r;
+      });
+      const done = doneKeys.map((k) => { const r = build(k, w); return { k: r.k, name: r.name, mod: k === 'iv' }; });
+      return {
+        w, cur: w === 5, range: range(w), km: Math.round(kmOf(w)), open: !!st.open[w],
+        info: w === 5 ? '3 of 7 done' : '7 workouts' + (w === 6 && edited6 ? ' · 1 edited' : ''),
+        toggle: () => this.setState({ open: Object.assign({}, st.open, { [w]: !st.open[w] }) }),
+        hasDone: done.length > 0, done, rows, edited: w === 6 && edited6,
+        resetWeek: () => this.setState({ ov: null, editing: false })
+      };
+    });
+    return { theme: this.props.theme ?? 'light', weeks, loading: mode === 'edit', more: mode !== 'edit' };
+  }
+}
+</script>
+</body>
+</html>

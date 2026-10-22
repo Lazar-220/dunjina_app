@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New plan basics</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="wz">
+    <a class="ib" href="Cal-Empty.dc.html" aria-label="Close wizard"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <span class="b grow">New plan</span>
+    <span class="sm muted" style="padding-right: 8px">Step 1 of 4</span>
+  </div>
+  <div class="bars"><i class="on"></i><i></i><i></i><i></i></div>
+  <div class="scroll" style="padding-top: 18px; gap: 18px">
+    <div class="col g4">
+      <h1 class="title">Basics</h1>
+      <p class="muted">Name the plan and say when it runs.</p>
+    </div>
+    <div class="field">
+      <label class="lbl" for="pname">Plan name</label>
+      <input id="pname" class="inp" value="Autumn base" autocomplete="off">
+    </div>
+    <div class="field">
+      <span class="lbl">Start date</span>
+      <button class="inp" style="justify-content: space-between">
+        <span>Mon 21 Sep 2026</span>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
+      </button>
+      <span class="hint">Weeks run Monday to Sunday.</span>
+    </div>
+    <div class="card r" style="min-height: 72px">
+      <div class="grow col g4">
+        <span class="b">Open-ended</span>
+        <span class="sm muted">Runs until you change it. Workouts keep generating as you scroll.</span>
+      </div>
+      <button class="tgl" role="switch" aria-checked="false" aria-label="Open-ended"></button>
+    </div>
+    <div class="field">
+      <span class="lbl">End date</span>
+      <button class="inp err" style="justify-content: space-between" aria-describedby="enderr">
+        <span>Mon 14 Sep 2026</span>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
+      </button>
+      <span id="enderr" class="hint err r g6" role="alert"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17.5h.01"/></svg>End date must be after the start date.</span>
+    </div>
+  </div>
+  <div class="foot">
+    <button class="btn s" style="min-width: 96px">Cancel</button>
+    <button class="btn off" aria-disabled="true">Next: weekly structure</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

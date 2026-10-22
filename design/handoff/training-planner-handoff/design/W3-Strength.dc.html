@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Configure strength slot</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./tp.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+.pvg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.pv{border-radius:10px;background:var(--surface2);padding:5px 4px 6px;text-align:center;font-size:13px;display:flex;flex-direction:column;gap:1px}
+.pv small{font-size:12px;color:var(--ink2);font-weight:600}
+.pv.up{background:color-mix(in oklch,var(--c) 24%,var(--surface));font-weight:700}
+.xrow{display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:60px;border-radius:16px;border:1.5px solid var(--line2);background:var(--surface)}
+</style>
+</helmet>
+<div class="app" data-theme="{{theme}}" style="width: 390px; height: 844px">
+  <div class="wz">
+    <a class="ib" href="W2-Structure.dc.html" aria-label="Back"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <span class="b grow">New plan</span>
+    <span class="sm muted" style="padding-right: 8px">Step 3 of 4</span>
+  </div>
+  <div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+  <div class="slots" style="padding-top: 14px">
+    <button class="sl on t-lo"><span class="mini sq">LO</span>Lower</button>
+    <button class="sl t-up"><span class="mini sq">UP</span>Upper<svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+    <button class="sl t-ez"><span class="mini">EZ</span>Easy A</button>
+    <button class="sl t-ez"><span class="mini">EZ</span>Easy B</button>
+    <button class="sl t-lr"><span class="mini">LR</span>Long</button>
+    <button class="sl t-tp"><span class="mini">TP</span>Tempo</button>
+    <button class="sl t-iv"><span class="mini">IV</span>Intervals</button>
+  </div>
+  <div class="scroll" style="padding-top: 10px">
+    <div class="r rb"><h1 style="font-size: 22px; font-weight: 700">Lower body</h1><span class="sm muted">Slot 1 of 7 · Mon</span></div>
+    <div class="card col g12 t-lo" style="border-color: var(--ink); border-width: 1.5px">
+      <div class="r rb"><span class="b">Back squat</span><span class="st">Editing</span></div>
+      <div class="field">
+        <label class="lbl" for="exn">Exercise</label>
+        <input id="exn" class="inp" value="Back squat" autocomplete="off">
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div class="field"><span class="lbl">Sets</span><div class="step"><button aria-label="Fewer sets"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">3</span><button aria-label="More sets"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Current reps</span><div class="step"><button aria-label="Fewer reps"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">6</span><button aria-label="More reps"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Min reps</span><div class="step"><button aria-label="Lower min"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">6</span><button aria-label="Raise min"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Max reps</span><div class="step"><button aria-label="Lower max"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">10</span><button aria-label="Raise max"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Reps step</span><div class="step"><button aria-label="Smaller step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">+2</span><button aria-label="Larger step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        <div class="field"><span class="lbl">Current weight</span><div class="step"><button aria-label="Lighter"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">60<span class="u">kg</span></span><button aria-label="Heavier"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+      </div>
+      <div class="field">
+        <span class="lbl">Weight step</span>
+        <div class="step" style="max-width: 180px"><button aria-label="Smaller weight step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="v">+2.5<span class="u">kg</span></span><button aria-label="Larger weight step"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+        <span class="hint">Added only in the week reps reset to min.</span>
+      </div>
+      <div class="field">
+        <label class="lbl" for="exnote">Note (optional)</label>
+        <input id="exnote" class="inp" value="Pause 1 s at the bottom" autocomplete="off">
+      </div>
+      <div class="sep"></div>
+      <div class="col g8">
+        <div class="r rb"><span class="b sm">Projection · reps@kg</span><span class="xs muted">highlighted = weight step</span></div>
+        <div class="pvg">
+          <sc-for list="{{pv}}" as="p" hint-placeholder-count="8">
+            <div class="pv {{p.cls}}"><small>{{p.w}}</small><span class="mono">{{p.t}}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="r g8">
+        <button class="btn s grow" style="min-height: 46px"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg>Remove</button>
+        <button class="btn p grow" style="min-height: 46px">Done</button>
+      </div>
+    </div>
+    <button class="xrow" style="text-align: left">
+      <span class="grow col"><span class="b">Romanian deadlift</span><span class="sm muted">3 × 8–12 · +2 reps · 50 kg, +5 kg</span></span>
+      <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <button class="xrow" style="text-align: left">
+      <span class="grow col"><span class="b">Walking lunge</span><span class="sm muted">3 × 8–12 · +2 reps · 14 kg, +2 kg</span></span>
+      <svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <button class="empty-slot" style="justify-content: center; font-weight: 600"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add exercise</button>
+  </div>
+  <div class="foot">
+    <a class="btn s" href="W2-Structure.dc.html" style="min-width: 96px">Back</a>
+    <a class="btn p" href="W4-EasyRun.dc.html">Next slot: Upper</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    // strength rule: prev reps >= max -> reps = min, weight += step; else reps = min(prev + x, max)
+    const e = { cur: 6, min: 6, max: 10, x: 2, kg: 60, step: 2.5 };
+    const pv = []; let p;
+    for (let w = 1; w <= 8; w++) {
+      let r, k;
+      if (w === 1) { r = e.cur; k = e.kg; }
+      else if (p[0] >= e.max) { r = e.min; k = p[1] + e.step; }
+      else { r = Math.min(p[0] + e.x, e.max); k = p[1]; }
+      pv.push({ w: 'W' + w, t: r + '@' + +k.toFixed(1), cls: w > 1 && k > p[1] ? 'up t-lo' : '' });
+      p = [r, k];
+    }
+    return { theme: this.props.theme ?? 'light', pv };
+  }
+}
+</script>
+</body>
+</html>
