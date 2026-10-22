@@ -52,8 +52,18 @@ export function createDexieRepository(databaseName = 'training-planner'): Reposi
     async listPlans() {
       return parseRows('plans', planSchema, await db.plans.toArray());
     },
-    async savePlan(plan) {
-      await db.plans.put(plan);
+    async savePlan(plan, dropOverridesOfSlots = []) {
+      await db.transaction('rw', db.plans, db.overrides, async () => {
+        await db.plans.put(plan);
+        const removed = new Set(dropOverridesOfSlots);
+        if (removed.size > 0) {
+          await db.overrides
+            .where('planId')
+            .equals(plan.id)
+            .filter((override) => removed.has(override.slotId))
+            .delete();
+        }
+      });
     },
 
     async listOverrides(planId) {

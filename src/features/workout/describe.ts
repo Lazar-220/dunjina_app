@@ -1,3 +1,4 @@
+import { runningKm } from '../../domain/metrics';
 import { roundValue } from '../../domain/progression';
 import type { WorkoutValues } from '../../domain/schedule';
 
@@ -5,11 +6,6 @@ import type { WorkoutValues } from '../../domain/schedule';
 export const fmt = (value: number): string => String(roundValue(value));
 
 export const fmtSpeed = (kmh: number): string => kmh.toFixed(1);
-
-export function totalKm(values: Extract<WorkoutValues, { kind: 'tempo' | 'intervals' }>): number {
-  if (values.kind === 'tempo') return roundValue(values.warmupKm + values.km + values.cooldownKm);
-  return roundValue(values.warmupKm + (values.count * values.distanceM) / 1000 + values.cooldownKm);
-}
 
 /** One-line summary shown under a workout's name. */
 export function describeValues(values: WorkoutValues): string {
@@ -23,7 +19,7 @@ export function describeValues(values: WorkoutValues): string {
     case 'run':
       return `${fmt(values.km)} km`;
     case 'tempo':
-      return `${fmt(values.km)} km tempo · ${fmt(totalKm(values))} km total`;
+      return `${fmt(values.km)} km tempo · ${fmt(runningKm(values))} km total`;
     case 'intervals':
       return `${values.count} × ${fmt(values.distanceM)} m · ${fmtSpeed(values.speedKmh)} km/h`;
   }

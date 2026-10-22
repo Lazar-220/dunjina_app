@@ -65,3 +65,14 @@ My engine and tests were written from the brief; afterwards I ran 1,200 randomiz
 - "Reset to generated values" on a workout deletes its whole override, including a done flag and a moved date.
 - Plan data is held in memory and reloaded from IndexedDB after every write (volumes are small); screens never read the database directly.
 - Month grid shows 5 or 6 rows as the month needs; each day shows at most 4 dots.
+
+## Plan wizard (M5)
+- **Reviewed decision:** only one plan is active at a time, so the design's "Upcoming" plan state does not exist. A plan is *active* until it is ended (or its end date passes); a plan whose start date is in the future is still the one active plan. "New plan" and "Duplicate as new plan" show an explanation with a link to Plans while a plan is active.
+- The wizard keeps its steps in component state (one route, `#/plans/new`), not in the URL; "Edit plan" is `#/plans/edit/<id>` and starts at the structure step, as the design links it. "Duplicate as new plan" is `#/plans/new?from=<id>`: same slots with fresh ids, starting this week, open-ended, named "<name> (copy)".
+- A new plan starts in the current week (Monday of today's week) and is open-ended; switching open-ended off suggests an end date 12 weeks after the start.
+- Editing an active plan: the start date is locked (every saved edit is keyed to a plan week, so moving the start would silently shift them); the end date cannot be earlier than the last done workout (see above); a slot with done workouts cannot be removed; removing any other slot also deletes its saved edits and moves, atomically with the plan update (`savePlan(plan, dropOverridesOfSlots)`). Ended plans cannot be edited.
+- Slot labels ("Easy run A/B") are stored only when a type occurs more than once; a single slot uses the plain type name.
+- New slots get the type's usual weekday (lower Mon, intervals Tue, easy Wed, upper Thu, tempo Fri, long Sun) or the first free day; "No day" is available and creates "unassigned" drafts.
+- The note field of a run, tempo or intervals slot is stored on the slot and shown in the workout sheet; strength notes are stored per exercise.
+- Min above max, step <= 0 and "current outside range" show as non-blocking warning banners and amber steppers (see Validation). Only structural errors (empty name, bad date range, no workout in the week, unnamed exercise, no exercise) disable the Next button.
+- The review step and every projection are computed by the same engine that renders the weeks (a temporary plan with no overrides), so they cannot disagree with the calendar. They cover the first 8 weeks; the text says later weeks follow the same rules.

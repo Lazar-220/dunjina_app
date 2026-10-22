@@ -1,10 +1,11 @@
 import { formatDayShort } from '../../domain/dates';
+import { runningKm } from '../../domain/metrics';
 import type { WorkoutValues } from '../../domain/schedule';
 import { Banner } from '../../shared/ui/Banner';
 import { Icon } from '../../shared/ui/Icon';
 import { Sheet, SheetHeader } from '../../shared/ui/Sheet';
 import type { CalendarItem } from './calendar-item';
-import { fmt, fmtSpeed, totalKm } from './describe';
+import { fmt, fmtSpeed } from './describe';
 
 interface WorkoutViewProps {
   item: CalendarItem;
@@ -44,6 +45,7 @@ export function WorkoutView({ item, next, onClose, onMarkDone, onEdit, onMove, o
       />
       <div className="body">
         <WorkoutDetails values={item.actual} next={next} edited={item.edited} />
+        {item.note && item.actual.kind !== 'strength' && <span className="sm muted">{item.note}</span>}
       </div>
       {!done && (
         <button type="button" className="btn p blk" onClick={onMarkDone}>
@@ -140,7 +142,7 @@ function WorkoutDetails({ values, next, edited }: { values: WorkoutValues; next:
             {next?.kind === 'tempo' && <NextWeek text={`${fmt(next.km)} km`} />}
           </div>
           <span className="sm muted">
-            {fmt(values.warmupKm)} km warm-up · {fmt(values.cooldownKm)} km cool-down · {fmt(totalKm(values))} km total
+            {fmt(values.warmupKm)} km warm-up · {fmt(values.cooldownKm)} km cool-down · {fmt(runningKm(values))} km total
           </span>
         </div>
       );

@@ -8,6 +8,8 @@ interface StepperProps {
   hideLabel?: boolean;
   value: number;
   unit?: string;
+  /** Shown before the value, e.g. "+" for a step size. */
+  prefix?: string;
   step: number;
   min?: number;
   onChange: (value: number) => void;
@@ -25,6 +27,7 @@ export function Stepper({
   hideLabel = false,
   value,
   unit,
+  prefix,
   step,
   min = 0,
   onChange,
@@ -59,11 +62,13 @@ export function Stepper({
           <Icon name="minus" size="s" />
         </button>
         <span className="v">
+          {prefix && <span className="u">{prefix}</span>}
           <input
             inputMode="decimal"
             autoComplete="off"
             aria-labelledby={labelId}
             value={shown}
+            style={{ width: `${Math.max(shown.length, 1) + 0.6}ch` }}
             onChange={(event) => onType(event.target.value)}
             onBlur={() => setText(null)}
           />

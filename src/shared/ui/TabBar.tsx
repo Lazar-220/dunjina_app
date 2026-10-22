@@ -1,22 +1,22 @@
-import { hrefOf, type Route } from '../router';
+import { hrefOf, type TabRoute } from '../router';
 import { Icon, type IconName } from './Icon';
 
-const TABS: { route: Route; label: string; icon: IconName }[] = [
-  { route: '/', label: 'Calendar', icon: 'calendar' },
-  { route: '/weeks', label: 'Weeks', icon: 'weeks' },
-  { route: '/plans', label: 'Plans', icon: 'plans' },
-  { route: '/settings', label: 'Settings', icon: 'settings' },
+const TABS: { route: TabRoute; label: string; icon: IconName }[] = [
+  { route: { name: 'calendar' }, label: 'Calendar', icon: 'calendar' },
+  { route: { name: 'weeks' }, label: 'Weeks', icon: 'weeks' },
+  { route: { name: 'plans' }, label: 'Plans', icon: 'plans' },
+  { route: { name: 'settings' }, label: 'Settings', icon: 'settings' },
 ];
 
-export function TabBar({ current }: { current: Route }) {
+export function TabBar({ current }: { current: TabRoute['name'] }) {
   return (
     <nav className="tabbar" aria-label="Main">
       {TABS.map(({ route, label, icon }) => (
         <a
-          key={route}
-          className={route === current ? 'tab on' : 'tab'}
+          key={route.name}
+          className={route.name === current ? 'tab on' : 'tab'}
           href={hrefOf(route)}
-          aria-current={route === current ? 'page' : undefined}
+          aria-current={route.name === current ? 'page' : undefined}
         >
           <span className="pill">
             <Icon name={icon} />

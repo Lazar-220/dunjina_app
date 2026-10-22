@@ -21,7 +21,7 @@ export interface PlanDataApi {
   removeOverride: (key: Pick<Override, 'planId' | 'slotId' | 'week'>) => Promise<void>;
   saveOneOff: (oneOff: OneOff) => Promise<void>;
   removeOneOff: (id: string) => Promise<void>;
-  savePlan: (plan: Plan) => Promise<void>;
+  savePlan: (plan: Plan, dropOverridesOfSlots?: readonly string[]) => Promise<void>;
 }
 
 const PlanDataContext = createContext<PlanDataApi | null>(null);
@@ -85,8 +85,8 @@ export function PlanDataProvider({ children }: { children: ReactNode }) {
         await repository.removeOneOff(id);
         await reload();
       },
-      savePlan: async (plan) => {
-        await repository.savePlan(plan);
+      savePlan: async (plan, dropOverridesOfSlots) => {
+        await repository.savePlan(plan, dropOverridesOfSlots);
         await reload();
       },
     }),

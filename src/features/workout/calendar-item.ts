@@ -22,6 +22,8 @@ export interface CalendarItem {
   actual: WorkoutValues;
   planName: string | null;
   week: number | null;
+  /** The slot's note, for workouts that have one. */
+  note: string | null;
 }
 
 export function planItem(plan: Plan, workout: Workout): CalendarItem {
@@ -38,6 +40,7 @@ export function planItem(plan: Plan, workout: Workout): CalendarItem {
     actual: workout.actual,
     planName: plan.name,
     week: workout.week,
+    note: slot?.note ?? null,
   };
 }
 
@@ -89,6 +92,7 @@ export function oneOffItem(oneOff: OneOff): CalendarItem {
     actual,
     planName: null,
     week: null,
+    note: null,
   };
 }
 

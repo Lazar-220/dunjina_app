@@ -5,7 +5,8 @@ import type { Settings } from './settings';
 /** All persistence goes through this interface; the UI never touches the database directly. */
 export interface Repository {
   listPlans(): Promise<Plan[]>;
-  savePlan(plan: Plan): Promise<void>;
+  /** Saves the plan; `dropOverridesOfSlots` also deletes saved edits of removed slots, in the same transaction. */
+  savePlan(plan: Plan, dropOverridesOfSlots?: readonly string[]): Promise<void>;
 
   listOverrides(planId: string): Promise<Override[]>;
   saveOverride(override: Override): Promise<void>;

@@ -61,6 +61,21 @@ describe('Dexie repository', () => {
     expect(await repository.listOneOffs()).toEqual([]);
   });
 
+  it('drops saved edits of removed slots together with the plan update', async () => {
+    const data = sampleData();
+    const [plan] = data.plans;
+    const [override] = data.overrides;
+    if (!plan || !override) throw new Error('Incomplete sample.');
+    await repository.replaceAll(data);
+    const other = { ...override, slotId: plan.slots[0]?.id ?? 'missing', week: 4, date: '2026-11-09' };
+    await repository.saveOverride(other);
+
+    await repository.savePlan({ ...plan, name: 'Renamed' }, [override.slotId]);
+
+    expect((await repository.listPlans())[0]?.name).toBe('Renamed');
+    expect((await repository.listOverrides(plan.id)).map((o) => o.slotId)).toEqual([other.slotId]);
+  });
+
   it('persists settings', async () => {
     await repository.saveSettings({ theme: 'dark', lastBackupDate: '2026-10-22' });
     expect(await repository.getSettings()).toEqual({ theme: 'dark', lastBackupDate: '2026-10-22' });

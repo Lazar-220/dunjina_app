@@ -51,6 +51,8 @@ export const intervalDraftSchema = z.object({
 const slotBase = {
   id: idSchema,
   label: z.string().optional(),
+  /** Free text shown with the workout, e.g. "Conversational pace". Strength notes live on the exercises. */
+  note: z.string().optional(),
   /** null: the draft has no day and shows as "unassigned" in its week. */
   defaultWeekday: weekdaySchema.nullable(),
 };

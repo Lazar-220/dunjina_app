@@ -147,7 +147,7 @@ input.inp{outline:0}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .btn[disabled]{background:var(--surface2);color:var(--ink3);cursor:not-allowed}
 .step .v{display:flex;justify-content:center;align-items:baseline;gap:2px;flex:1;min-width:0}
-.step .v input{width:5.5ch;max-width:100%;text-align:right;border:0;background:transparent;padding:0;font-weight:650;font-size:16px;outline:0;border-radius:6px}
+.step .v input{max-width:100%;text-align:right;border:0;background:transparent;padding:0;font-weight:650;font-size:16px;outline:0;border-radius:6px}
 .step:focus-within{outline:2px solid var(--ink);outline-offset:2px}
 .wk-main{display:flex;align-items:center;gap:12px;flex:1;min-width:0;min-height:44px;text-align:left}
 .wk.past{opacity:.6}
@@ -174,3 +174,4 @@ input.inp{outline:0}
 .empty-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;width:100%}
 .empty-week span{height:56px;border-radius:12px;border:1.5px dashed var(--line2);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:7px;gap:3px;font-size:12px;font-weight:600;color:var(--ink2)}
 button.empty-slot{background:transparent;width:100%}
+.scroll>*{flex-shrink:0}
