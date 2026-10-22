@@ -18,6 +18,15 @@ Every assumption made while building v1. Format: **decision** — why. Items mar
 - One active plan at a time. Creating a new plan while one is active asks the user to end the current one first. *(review)*
 - Marking a workout done stores a full snapshot of all its actual values in the override, so later edits to earlier weeks or to the plan config never change logged history. Edits that are not done stay sparse (only fields that differ from the generated value). A done override is a baseline for later weeks like any other.
 
+- Device preferences (theme, date of the last backup) are stored in IndexedDB but are **not part of the backup file**: they describe this device, and importing must not change them. The backup holds plans, overrides and one-off workouts.
+- The last backup is stored as a local calendar date (`YYYY-MM-DD`), not a timestamp; its age is counted in whole days.
+- Import validates more than the shape: duplicate plan/slot/one-off ids, changes that point at a missing slot, duplicate changes for one week, and values of the wrong kind are all rejected. Import runs in one Dexie transaction, so a failure leaves the old data untouched.
+- No in-memory repository: tests use the real Dexie implementation on fake-indexeddb, so there is only one implementation to keep correct.
+- Reads from IndexedDB are validated with zod; unreadable rows raise `StoredDataError` ("Import a backup to restore your data") instead of crashing later.
+- Backup download uses the standard Blob + `<a download>` mechanism. If Android's WebView later does not honour it, only `shared/download.ts` needs a Capacitor-specific path.
+- "Load demo plan" refuses to run while a plan is active (one active plan at a time) and says so; it is available until ending a plan exists (M6).
+- Theme `system` follows `prefers-color-scheme` live; the choice is applied as `data-theme` on `<html>`, so tokens work for dialogs and the page background alike.
+
 ## UI
 - Before/after preview horizon is 3 following weeks (brief: "2-3").
 - A draft whose slot has no default weekday is shown as an "unassigned" chip in its week and in the Weeks list.

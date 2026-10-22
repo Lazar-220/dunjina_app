@@ -15,6 +15,8 @@ const weekdaySchema = z.union([
   z.literal(6),
 ]);
 
+export const slotTypeSchema = z.enum(['lower', 'upper', 'easy', 'long', 'tempo', 'intervals']);
+
 const idSchema = z.string().min(1);
 
 // ---------- slot configuration ----------
@@ -147,9 +149,56 @@ export const overrideSchema = z.object({
   deleted: z.boolean().optional(),
 });
 
+// ---------- one-off workouts ----------
+
+/** Values of a one-off workout; unlike overrides, every field is required because there is no plan to fall back on. */
+export const oneOffDetailsSchema = z.discriminatedUnion('kind', [
+  z.object({
+    kind: z.literal('strength'),
+    exercises: z.array(
+      z.object({ name: z.string().min(1), sets: z.number().int().min(1), reps: z.number(), kg: z.number() }),
+    ),
+  }),
+  z.object({ kind: z.literal('run'), km: z.number() }),
+  z.object({ kind: z.literal('tempo'), km: z.number(), warmupKm: z.number(), cooldownKm: z.number() }),
+  z.object({
+    kind: z.literal('intervals'),
+    count: z.number().int().min(1),
+    distanceM: z.number().positive(),
+    restS: z.number().min(0),
+    speedKmh: z.number(),
+    warmupKm: z.number(),
+    cooldownKm: z.number(),
+  }),
+]);
+
+export const KIND_OF_TYPE = {
+  lower: 'strength',
+  upper: 'strength',
+  easy: 'run',
+  long: 'run',
+  tempo: 'tempo',
+  intervals: 'intervals',
+} as const;
+
+export const oneOffSchema = z
+  .object({
+    id: idSchema,
+    date: isoDateSchema,
+    type: slotTypeSchema,
+    done: z.boolean(),
+    details: oneOffDetailsSchema,
+  })
+  .refine((oneOff) => oneOff.details.kind === KIND_OF_TYPE[oneOff.type], {
+    message: 'Workout details do not match the workout type.',
+    path: ['details'],
+  });
+
 // ---------- types ----------
 
-export type SlotType = 'lower' | 'upper' | 'easy' | 'long' | 'tempo' | 'intervals';
+export type SlotType = z.infer<typeof slotTypeSchema>;
+export type OneOffDetails = z.infer<typeof oneOffDetailsSchema>;
+export type OneOff = z.infer<typeof oneOffSchema>;
 
 export type RunConfig = z.infer<typeof runConfigSchema>;
 export type ExerciseConfig = z.infer<typeof exerciseConfigSchema>;
