@@ -1,0 +1,27 @@
+/* Design tokens (from design/tp.css). Colour means workout type only. */
+:root {
+  color-scheme: light;
+  --bg:oklch(0.975 0.004 240);--surface:#fff;--surface2:oklch(0.955 0.006 240);
+  --ink:oklch(0.21 0.02 250);--ink2:oklch(0.45 0.02 250);--ink3:oklch(0.66 0.015 250);
+  --line:oklch(0.91 0.006 250);--line2:oklch(0.82 0.008 250);
+  --btn:oklch(0.21 0.02 250);--on-btn:#fff;--scrim:oklch(0.2 0.02 250 / .48);
+  --t-lo:oklch(0.40 0.17 295);--t-up:oklch(0.60 0.19 348);--t-ez:oklch(0.72 0.13 175);
+  --t-lr:oklch(0.52 0.16 250);--t-tp:oklch(0.82 0.15 82);--t-iv:oklch(0.62 0.21 28);
+  --warn-bg:oklch(0.96 0.06 92);--warn-ink:oklch(0.36 0.08 70);--warn-line:oklch(0.78 0.13 85);
+  --err-bg:oklch(0.96 0.03 25);--err-ink:oklch(0.45 0.18 27);--err-line:oklch(0.62 0.19 27);
+  --ok-bg:oklch(0.95 0.04 165);--ok-ink:oklch(0.38 0.09 165);
+  --shadow:0 8px 28px oklch(0.2 0.02 250 / .18);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:oklch(0.17 0.01 250);--surface:oklch(0.215 0.012 250);--surface2:oklch(0.26 0.012 250);
+  --ink:oklch(0.95 0.005 250);--ink2:oklch(0.76 0.01 250);--ink3:oklch(0.5 0.012 250);
+  --line:oklch(0.3 0.012 250);--line2:oklch(0.4 0.014 250);
+  --btn:oklch(0.95 0.005 250);--on-btn:oklch(0.2 0.02 250);--scrim:oklch(0.08 0.01 250 / .62);
+  --t-lo:oklch(0.72 0.14 300);--t-up:oklch(0.76 0.15 350);--t-ez:oklch(0.8 0.12 175);
+  --t-lr:oklch(0.74 0.12 245);--t-tp:oklch(0.86 0.14 85);--t-iv:oklch(0.76 0.16 30);
+  --warn-bg:oklch(0.3 0.05 85);--warn-ink:oklch(0.9 0.08 90);--warn-line:oklch(0.6 0.11 85);
+  --err-bg:oklch(0.3 0.06 25);--err-ink:oklch(0.86 0.09 25);--err-line:oklch(0.65 0.17 27);
+  --ok-bg:oklch(0.3 0.05 165);--ok-ink:oklch(0.88 0.08 165);
+  --shadow:0 8px 28px oklch(0 0 0 / .5);
+}
