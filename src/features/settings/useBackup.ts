@@ -13,6 +13,7 @@ import type { Repository } from '../../data/repository';
 import { downloadTextFile } from '../../shared/download';
 import { todayIso } from '../../shared/today';
 import { useToast } from '../../shared/ui/Toast';
+import { usePlanData } from '../plan-data/PlanDataProvider';
 import { useSettings } from './SettingsProvider';
 
 export interface StoredData extends BackupSummary {
@@ -37,6 +38,7 @@ export function useBackup() {
   const repository = useRepository();
   const { settings, update } = useSettings();
   const toast = useToast();
+  const planData = usePlanData();
   const [stored, setStored] = useState<StoredData | null>(null);
   const [importFlow, setImportFlow] = useState<ImportFlow>({ step: 'idle' });
   const [problem, setProblem] = useState<string | null>(null);
@@ -89,11 +91,12 @@ export function useBackup() {
       setProblem(null);
       toast.show({ message: 'Backup imported' });
       refresh();
+      await planData.reload();
     } catch (error) {
       setProblem(`Import failed and nothing was changed. ${errorText(error)}`);
     }
     setImportFlow({ step: 'idle' });
-  }, [importFlow, refresh, repository, toast]);
+  }, [importFlow, planData, refresh, repository, toast]);
 
   const dismissImport = useCallback(() => setImportFlow({ step: 'idle' }), []);
 

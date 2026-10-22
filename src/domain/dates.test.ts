@@ -3,7 +3,13 @@ import {
   compareDates,
   dateOfWeekday,
   diffDays,
+  firstOfMonth,
   formatDate,
+  formatDayShort,
+  formatMonthTitle,
+  monthGrid,
+  shiftMonth,
+  yearMonthOf,
   isValidIsoDate,
   mondayOf,
   weekdayOf,
@@ -125,5 +131,38 @@ describe('formatDate', () => {
   it('writes weekday, day, month and year', () => {
     expect(formatDate('2026-10-22')).toBe('Thu 22 Oct 2026');
     expect(formatDate('2027-01-03')).toBe('Sun 3 Jan 2027');
+  });
+});
+
+describe('month helpers', () => {
+  it('reads and shifts year-months across year boundaries', () => {
+    expect(yearMonthOf('2026-10-22')).toEqual({ year: 2026, month: 10 });
+    expect(shiftMonth({ year: 2026, month: 12 }, 1)).toEqual({ year: 2027, month: 1 });
+    expect(shiftMonth({ year: 2026, month: 1 }, -1)).toEqual({ year: 2025, month: 12 });
+    expect(shiftMonth({ year: 2026, month: 3 }, -15)).toEqual({ year: 2024, month: 12 });
+  });
+
+  it('formats titles and short days', () => {
+    expect(formatMonthTitle({ year: 2026, month: 10 })).toBe('October 2026');
+    expect(formatDayShort('2026-10-22')).toBe('Thu 22 Oct');
+    expect(firstOfMonth({ year: 2026, month: 3 })).toBe('2026-03-01');
+  });
+
+  it('builds a Monday-first grid of whole weeks covering the month', () => {
+    const october = monthGrid({ year: 2026, month: 10 });
+    expect(october).toHaveLength(35);
+    expect(october[0]).toBe('2026-09-28');
+    expect(october[34]).toBe('2026-11-01');
+  });
+
+  it('uses six rows when the month needs them and five when it fits', () => {
+    expect(monthGrid({ year: 2026, month: 8 })).toHaveLength(42);
+    expect(monthGrid({ year: 2027, month: 2 })).toHaveLength(28);
+  });
+
+  it('is stable across the daylight-saving change', () => {
+    const grid = monthGrid({ year: 2026, month: 10 });
+    expect(grid.indexOf('2026-10-25')).toBe(27);
+    expect(new Set(grid).size).toBe(grid.length);
   });
 });

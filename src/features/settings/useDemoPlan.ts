@@ -6,6 +6,7 @@ import { findActivePlan } from '../../domain/plans';
 import { newId } from '../../shared/ids';
 import { todayIso } from '../../shared/today';
 import { useToast } from '../../shared/ui/Toast';
+import { usePlanData } from '../plan-data/PlanDataProvider';
 
 type Outcome = { kind: 'none' } | { kind: 'blocked' } | { kind: 'failed'; message: string };
 
@@ -13,6 +14,7 @@ type Outcome = { kind: 'none' } | { kind: 'blocked' } | { kind: 'failed'; messag
 export function useDemoPlan(onLoaded: () => void) {
   const repository = useRepository();
   const toast = useToast();
+  const planData = usePlanData();
   const [outcome, setOutcome] = useState<Outcome>({ kind: 'none' });
 
   const loadDemoPlan = useCallback(async () => {
@@ -26,10 +28,11 @@ export function useDemoPlan(onLoaded: () => void) {
       setOutcome({ kind: 'none' });
       toast.show({ message: 'Demo plan loaded' });
       onLoaded();
+      await planData.reload();
     } catch (error) {
       setOutcome({ kind: 'failed', message: error instanceof Error ? error.message : String(error) });
     }
-  }, [onLoaded, repository, toast]);
+  }, [onLoaded, planData, repository, toast]);
 
   return { outcome, loadDemoPlan };
 }

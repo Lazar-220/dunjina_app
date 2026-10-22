@@ -79,3 +79,57 @@ export function formatDate(date: IsoDate): string {
   const [year, month, day] = date.split('-').map(Number);
   return `${WEEKDAY_NAMES[weekdayOf(date)]} ${day} ${MONTH_NAMES[(month ?? 1) - 1]} ${year}`;
 }
+
+const FULL_MONTH_NAMES = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+export interface YearMonth {
+  year: number;
+  /** 1-12 */
+  month: number;
+}
+
+export function yearMonthOf(date: IsoDate): YearMonth {
+  const [year, month] = date.split('-').map(Number);
+  return { year: year ?? 0, month: month ?? 1 };
+}
+
+export function shiftMonth({ year, month }: YearMonth, delta: number): YearMonth {
+  const index = year * 12 + (month - 1) + delta;
+  return { year: Math.floor(index / 12), month: (index % 12) + 1 };
+}
+
+export function firstOfMonth({ year, month }: YearMonth): IsoDate {
+  return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-01`;
+}
+
+/** "October 2026" */
+export function formatMonthTitle({ year, month }: YearMonth): string {
+  return `${FULL_MONTH_NAMES[month - 1]} ${year}`;
+}
+
+/** "Thu 22 Oct" */
+export function formatDayShort(date: IsoDate): string {
+  return formatDate(date).replace(/ \d{4}$/, '');
+}
+
+/** All dates shown by a Monday-first month grid: whole weeks covering the month (5 or 6 rows). */
+export function monthGrid(month: YearMonth): IsoDate[] {
+  const first = firstOfMonth(month);
+  const last = addDays(firstOfMonth(shiftMonth(month, 1)), -1);
+  const start = mondayOf(first);
+  const rows = Math.floor(diffDays(start, last) / 7) + 1;
+  return Array.from({ length: rows * 7 }, (_, i) => addDays(start, i));
+}

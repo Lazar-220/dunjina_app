@@ -10,6 +10,15 @@ const PATHS = {
   check: 'M5 12.5l4.5 4.5L19 7',
   close: 'M6 6l12 12M18 6L6 18',
   info: 'M12 11v5M12 8h.01',
+  plus: 'M12 5v14M5 12h14',
+  minus: 'M5 12h14',
+  back: 'M15 5l-7 7 7 7',
+  forward: 'M9 5l7 7-7 7',
+  down: 'M5 9l7 7 7-7',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
+  edit: 'M4 20l1-4L16 5l3 3L8 19l-4 1z',
+  move: 'M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4',
+  trash: 'M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13',
 } as const;
 
 export type IconName = keyof typeof PATHS;
@@ -29,7 +38,7 @@ export function Icon({ name, size = 'm' }: { name: IconName; size?: IconSize }) 
         </>
       )}
       {name === 'info' && <circle cx="12" cy="12" r="9" />}
-      <path d={PATHS[name]} />
+      <path d={PATHS[name]} style={name === 'more' ? { strokeWidth: 3.2 } : undefined} />
     </svg>
   );
 }

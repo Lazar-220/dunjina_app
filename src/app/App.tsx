@@ -1,5 +1,7 @@
 import { RepositoryProvider } from '../data/RepositoryContext';
 import type { Repository } from '../data/repository';
+import { CalendarScreen } from '../features/calendar/CalendarScreen';
+import { PlanDataProvider } from '../features/plan-data/PlanDataProvider';
 import { SettingsProvider } from '../features/settings/SettingsProvider';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { useRoute, type Route } from '../shared/router';
@@ -10,7 +12,7 @@ import { PendingScreen } from './PendingScreen';
 function Screen({ route }: { route: Route }) {
   switch (route) {
     case '/':
-      return <PendingScreen title="Calendar" />;
+      return <CalendarScreen />;
     case '/weeks':
       return <PendingScreen title="Weeks" />;
     case '/plans':
@@ -35,9 +37,11 @@ export function App({ repository }: { repository: Repository }) {
     <RepositoryProvider repository={repository}>
       <div className="app">
         <SettingsProvider>
-          <ToastProvider>
-            <Shell />
-          </ToastProvider>
+          <PlanDataProvider>
+            <ToastProvider>
+              <Shell />
+            </ToastProvider>
+          </PlanDataProvider>
         </SettingsProvider>
       </div>
     </RepositoryProvider>

@@ -53,3 +53,15 @@ My engine and tests were written from the brief; afterwards I ran 1,200 randomiz
 - The reference takes whole-series override maps per config and folds from week 1 each time; mine takes per-slot overrides (sparse or snapshot), folds from the nearest override, and also handles dates, deletes and plan end.
 - The reference validates nothing; mine returns warnings/errors (see Validation).
 - The reference's `previewX` helpers are three near-identical functions; mine is one `previewImpact` built on the same code path that renders the weeks, so the preview cannot disagree with the calendar.
+
+## Calendar and workout sheets (M4)
+- The calendar shows workouts of **all** plans plus one-offs, so history of an ended plan stays visible; the Weeks tab works on the active plan only.
+- The "⋯" button on a week row opens the Move sheet directly ("Move to…" is the only non-drag action the brief asks for); tapping the row opens the full workout sheet, which also has Move to….
+- Free-form "workout notes" from the sheet design are not built (not in the brief, no place in the data model). Per-exercise notes entered in the plan wizard are shown in the workout sheet.
+- A new one-off starts with sensible defaults (easy run 5 km, long run 10 km, tempo 3 km, intervals 5 × 400 m @ 12 km/h, one strength exercise 3 × 8 @ 20 kg). One-off strength workouts are free-form: exercise names, sets, reps and weight can be edited and exercises added or removed. One-offs never feed progression and show no before/after preview.
+- Steppers are also text inputs (decimal keyboard), so any value can be typed. Step sizes when logging: reps 1, weight 2.5 kg, run distance 0.5 km, speed 0.5 km/h, interval distance 50 m, rest 5 s.
+- The date fields of the Add and Move sheets use the browser's native date input (standard web API, accessible, no custom picker to maintain).
+- Every change shows a toast with Undo; Undo restores the exact previous override (or removes the one just created).
+- "Reset to generated values" on a workout deletes its whole override, including a done flag and a moved date.
+- Plan data is held in memory and reloaded from IndexedDB after every write (volumes are small); screens never read the database directly.
+- Month grid shows 5 or 6 rows as the month needs; each day shows at most 4 dots.

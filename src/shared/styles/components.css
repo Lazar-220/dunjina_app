@@ -3,10 +3,10 @@ html,body,#root{height:100%}
 body{margin:0;background:var(--bg)}
 .app{width:100%;max-width:480px;height:100dvh;margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg);color:var(--ink);font:400 15px/1.35 "Figtree Variable",Figtree,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
 .app *{box-sizing:border-box}
-.app button,.app input{font:inherit;color:inherit}
-.app button{background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
-.app a{color:inherit;text-decoration:none}
-.app h1,.app h2,.app h3,.app p{margin:0}
+:where(.app) :is(button,input){font:inherit;color:inherit}
+:where(.app) button{background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+:where(.app) a{color:inherit;text-decoration:none}
+:where(.app) :is(h1,h2,h3,p){margin:0}
 .app ::-webkit-scrollbar{display:none}
 .ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .ic.s{width:18px;height:18px}.ic.xs{width:16px;height:16px}.ic.l{width:26px;height:26px}
@@ -146,3 +146,31 @@ input.inp{outline:0}
 .app :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .btn[disabled]{background:var(--surface2);color:var(--ink3);cursor:not-allowed}
+.step .v{display:flex;justify-content:center;align-items:baseline;gap:2px;flex:1;min-width:0}
+.step .v input{width:5.5ch;max-width:100%;text-align:right;border:0;background:transparent;padding:0;font-weight:650;font-size:16px;outline:0;border-radius:6px}
+.step:focus-within{outline:2px solid var(--ink);outline-offset:2px}
+.wk-main{display:flex;align-items:center;gap:12px;flex:1;min-width:0;min-height:44px;text-align:left}
+.wk.past{opacity:.6}
+.sheet-head{display:flex;align-items:center;gap:12px}
+.sheet .body .ex{border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.imp3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.imp3>div{background:var(--surface2);border-radius:11px;padding:6px 8px;display:flex;flex-direction:column;gap:1px;font-size:13px}
+.imp3 small{font-size:12px;color:var(--ink2);font-weight:600}
+.act{min-height:64px;border-radius:15px;border:1.5px solid var(--line2);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:650;text-align:center}
+.act.d{color:var(--err-ink);border-color:var(--err-line)}
+.wd{min-height:68px;border-radius:14px;border:1.5px solid var(--line2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:600;color:var(--ink2);background:var(--surface);text-align:center}
+.wd b{font-size:17px;color:var(--ink)}
+.wd.on{background:var(--btn);border-color:var(--btn);color:var(--on-btn)}.wd.on b{color:var(--on-btn)}
+.wd.cur{border-style:dashed}.wd.past{opacity:.6}
+.val{font-size:20px;font-weight:650;line-height:1}
+.val small{font-size:13px;font-weight:550;color:var(--ink2);margin-left:3px}
+.nx{margin-left:auto;text-align:right;font-size:13px;color:var(--ink2);display:flex;flex-direction:column;gap:2px}
+.legend{display:flex;gap:16px;padding:8px 20px 4px;flex:none;font-size:12px;color:var(--ink2)}
+.legend>span{display:flex;align-items:center;gap:6px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.three{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.three>:first-child{grid-column:1/-1}
+.three-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.empty-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;width:100%}
+.empty-week span{height:56px;border-radius:12px;border:1.5px dashed var(--line2);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:7px;gap:3px;font-size:12px;font-weight:600;color:var(--ink2)}
+button.empty-slot{background:transparent;width:100%}

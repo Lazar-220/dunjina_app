@@ -31,6 +31,7 @@ export interface StrengthExerciseValues {
   sets: number;
   reps: number;
   kg: number;
+  note?: string;
 }
 
 export type WorkoutValues =
@@ -85,7 +86,7 @@ export function indexOverrides(overrides: readonly Override[]): OverrideIndex {
   return bySlot;
 }
 
-function overrideFor(index: OverrideIndex, slotId: string, week: number): Override | undefined {
+export function overrideFor(index: OverrideIndex, slotId: string, week: number): Override | undefined {
   return index.get(slotId)?.get(week);
 }
 
@@ -124,7 +125,14 @@ function exerciseValues(
   value: { reps: number; kg: number },
   sets: number,
 ): StrengthExerciseValues {
-  return { exerciseId: exercise.id, name: exercise.name, sets, reps: value.reps, kg: value.kg };
+  return {
+    exerciseId: exercise.id,
+    name: exercise.name,
+    sets,
+    reps: value.reps,
+    kg: value.kg,
+    ...(exercise.note ? { note: exercise.note } : {}),
+  };
 }
 
 function runValues(
